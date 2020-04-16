@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657892, g: 0.4964127, b: 0.5748172, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -94,8 +94,9 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaDirect: 0.5
     m_PVRFilteringAtrousPositionSigmaIndirect: 2
     m_PVRFilteringAtrousPositionSigmaAO: 1
-    m_ShowResolutionOverlay: 1
     m_ExportTrainingData: 0
+    m_TrainingDataDestination: TrainingData
+    m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
   m_UseShadowmask: 1
 --- !u!196 &4
@@ -153,11 +154,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1036896146}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 4f9bfd1e0902247519c0c0611bd75d1b,
-        type: 3}
-      propertyPath: m_Name
-      value: Grass (3)
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 4f9bfd1e0902247519c0c0611bd75d1b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -213,6 +209,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -6.064
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 4f9bfd1e0902247519c0c0611bd75d1b,
+        type: 3}
+      propertyPath: m_Name
+      value: Grass (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 4f9bfd1e0902247519c0c0611bd75d1b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4f9bfd1e0902247519c0c0611bd75d1b, type: 3}
 --- !u!4 &54511655 stripped
@@ -228,16 +234,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 748245567}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 2de6c7c7f2f2f4a2b8d21682b37e8a21,
-        type: 3}
-      propertyPath: m_Name
-      value: Tree1 (2)
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: 2de6c7c7f2f2f4a2b8d21682b37e8a21,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 2de6c7c7f2f2f4a2b8d21682b37e8a21,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -307,6 +303,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 79.812996
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 2de6c7c7f2f2f4a2b8d21682b37e8a21,
+        type: 3}
+      propertyPath: m_Name
+      value: Tree1 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 2de6c7c7f2f2f4a2b8d21682b37e8a21,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2de6c7c7f2f2f4a2b8d21682b37e8a21, type: 3}
@@ -390,6 +396,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -401,6 +408,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -481,6 +489,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -492,6 +501,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -519,10 +529,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 502171373}
     m_Modifications:
-    - target: {fileID: 3743597651704331074, guid: ce71ddc64223549ed8fc19f77f5948b2,
+    - target: {fileID: 3743597651360454369, guid: ce71ddc64223549ed8fc19f77f5948b2,
         type: 3}
-      propertyPath: m_Name
-      value: Desert Portal
+      propertyPath: m_LocalPosition.y
+      value: 0.282
       objectReference: {fileID: 0}
     - target: {fileID: 3743597651704331073, guid: ce71ddc64223549ed8fc19f77f5948b2,
         type: 3}
@@ -579,6 +589,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3743597651704331074, guid: ce71ddc64223549ed8fc19f77f5948b2,
+        type: 3}
+      propertyPath: m_Name
+      value: Desert Portal
+      objectReference: {fileID: 0}
     - target: {fileID: 3743597651704331078, guid: ce71ddc64223549ed8fc19f77f5948b2,
         type: 3}
       propertyPath: linkedPortal
@@ -616,11 +631,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1036896146}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 4f9bfd1e0902247519c0c0611bd75d1b,
-        type: 3}
-      propertyPath: m_Name
-      value: Grass (1)
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 4f9bfd1e0902247519c0c0611bd75d1b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -676,6 +686,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 4f9bfd1e0902247519c0c0611bd75d1b,
+        type: 3}
+      propertyPath: m_Name
+      value: Grass (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 4f9bfd1e0902247519c0c0611bd75d1b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4f9bfd1e0902247519c0c0611bd75d1b, type: 3}
 --- !u!4 &304780738 stripped
@@ -691,16 +711,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 748245567}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: b5038b625a70847f1acaa8c2aa6049ea,
-        type: 3}
-      propertyPath: m_Name
-      value: Rock2
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: b5038b625a70847f1acaa8c2aa6049ea,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: b5038b625a70847f1acaa8c2aa6049ea,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -754,6 +764,16 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: b5038b625a70847f1acaa8c2aa6049ea,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: b5038b625a70847f1acaa8c2aa6049ea,
+        type: 3}
+      propertyPath: m_Name
+      value: Rock2
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: b5038b625a70847f1acaa8c2aa6049ea,
+        type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -850,6 +870,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -861,6 +882,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -955,6 +977,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -966,6 +989,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -993,11 +1017,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 748245567}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: b5038b625a70847f1acaa8c2aa6049ea,
-        type: 3}
-      propertyPath: m_Name
-      value: Rock2 (1)
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: b5038b625a70847f1acaa8c2aa6049ea,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1068,6 +1087,16 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 99.999985
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: b5038b625a70847f1acaa8c2aa6049ea,
+        type: 3}
+      propertyPath: m_Name
+      value: Rock2 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: b5038b625a70847f1acaa8c2aa6049ea,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b5038b625a70847f1acaa8c2aa6049ea, type: 3}
 --- !u!1 &476965390
@@ -1116,6 +1145,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1127,6 +1157,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -1299,6 +1330,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1310,6 +1342,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -1410,6 +1443,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1421,6 +1455,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -1466,8 +1501,9 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 705507993}
   m_Enabled: 1
-  serializedVersion: 9
+  serializedVersion: 10
   m_Type: 1
+  m_Shape: 0
   m_Color: {r: 1, g: 0.94695103, b: 0.8066038, a: 1}
   m_Intensity: 1
   m_Range: 10
@@ -1559,11 +1595,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1036896146}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: bf21357a8f9c64384b7d98941b0082bb,
-        type: 3}
-      propertyPath: m_Name
-      value: Cactus2
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: bf21357a8f9c64384b7d98941b0082bb,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1634,6 +1665,16 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 91.999985
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: bf21357a8f9c64384b7d98941b0082bb,
+        type: 3}
+      propertyPath: m_Name
+      value: Cactus2
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: bf21357a8f9c64384b7d98941b0082bb,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bf21357a8f9c64384b7d98941b0082bb, type: 3}
 --- !u!4 &746573783 stripped
@@ -1698,11 +1739,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 748245567}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 2de6c7c7f2f2f4a2b8d21682b37e8a21,
-        type: 3}
-      propertyPath: m_Name
-      value: Tree1
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 2de6c7c7f2f2f4a2b8d21682b37e8a21,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1773,6 +1809,16 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 75.757
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 2de6c7c7f2f2f4a2b8d21682b37e8a21,
+        type: 3}
+      propertyPath: m_Name
+      value: Tree1
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 2de6c7c7f2f2f4a2b8d21682b37e8a21,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2de6c7c7f2f2f4a2b8d21682b37e8a21, type: 3}
 --- !u!1 &780194199 stripped
@@ -1808,11 +1854,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 748245567}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 06694f1a7a8544822b9402c98d602719,
-        type: 3}
-      propertyPath: m_Name
-      value: Tree2 (1)
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 06694f1a7a8544822b9402c98d602719,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1883,6 +1924,16 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 85
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 06694f1a7a8544822b9402c98d602719,
+        type: 3}
+      propertyPath: m_Name
+      value: Tree2 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 06694f1a7a8544822b9402c98d602719,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 06694f1a7a8544822b9402c98d602719, type: 3}
 --- !u!1 &810995634
@@ -1945,6 +1996,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1956,6 +2008,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -1983,11 +2036,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1036896146}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: bf21357a8f9c64384b7d98941b0082bb,
-        type: 3}
-      propertyPath: m_Name
-      value: Cactus2 (3)
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: bf21357a8f9c64384b7d98941b0082bb,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2058,6 +2106,16 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 91.999985
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: bf21357a8f9c64384b7d98941b0082bb,
+        type: 3}
+      propertyPath: m_Name
+      value: Cactus2 (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: bf21357a8f9c64384b7d98941b0082bb,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bf21357a8f9c64384b7d98941b0082bb, type: 3}
 --- !u!1001 &872426828
@@ -2067,11 +2125,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 748245567}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 9ac771c9e070a4970b0e30d23ccb2244,
-        type: 3}
-      propertyPath: m_Name
-      value: Rock1 (1)
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 9ac771c9e070a4970b0e30d23ccb2244,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2137,6 +2190,16 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 100
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 9ac771c9e070a4970b0e30d23ccb2244,
+        type: 3}
+      propertyPath: m_Name
+      value: Rock1 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 9ac771c9e070a4970b0e30d23ccb2244,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9ac771c9e070a4970b0e30d23ccb2244, type: 3}
 --- !u!1 &894662405
@@ -2199,6 +2262,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -2210,6 +2274,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -2290,6 +2355,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -2301,6 +2367,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -2328,11 +2395,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 748245567}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 9ac771c9e070a4970b0e30d23ccb2244,
-        type: 3}
-      propertyPath: m_Name
-      value: Rock1
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 9ac771c9e070a4970b0e30d23ccb2244,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2403,6 +2465,16 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 82.58599
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 9ac771c9e070a4970b0e30d23ccb2244,
+        type: 3}
+      propertyPath: m_Name
+      value: Rock1
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 9ac771c9e070a4970b0e30d23ccb2244,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9ac771c9e070a4970b0e30d23ccb2244, type: 3}
 --- !u!1001 &1002588559
@@ -2412,11 +2484,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 748245567}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 2de6c7c7f2f2f4a2b8d21682b37e8a21,
-        type: 3}
-      propertyPath: m_Name
-      value: Tree1 (1)
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 2de6c7c7f2f2f4a2b8d21682b37e8a21,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2487,6 +2554,16 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 72.12299
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 2de6c7c7f2f2f4a2b8d21682b37e8a21,
+        type: 3}
+      propertyPath: m_Name
+      value: Tree1 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 2de6c7c7f2f2f4a2b8d21682b37e8a21,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2de6c7c7f2f2f4a2b8d21682b37e8a21, type: 3}
 --- !u!1001 &1004426426
@@ -2496,11 +2573,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1036896146}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: bf21357a8f9c64384b7d98941b0082bb,
-        type: 3}
-      propertyPath: m_Name
-      value: Cactus2 (2)
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: bf21357a8f9c64384b7d98941b0082bb,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2571,6 +2643,16 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 90.586
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: bf21357a8f9c64384b7d98941b0082bb,
+        type: 3}
+      propertyPath: m_Name
+      value: Cactus2 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: bf21357a8f9c64384b7d98941b0082bb,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bf21357a8f9c64384b7d98941b0082bb, type: 3}
 --- !u!4 &1004426427 stripped
@@ -2639,11 +2721,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1036896146}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 4f9bfd1e0902247519c0c0611bd75d1b,
-        type: 3}
-      propertyPath: m_Name
-      value: Grass (4)
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 4f9bfd1e0902247519c0c0611bd75d1b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2699,6 +2776,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 4f9bfd1e0902247519c0c0611bd75d1b,
+        type: 3}
+      propertyPath: m_Name
+      value: Grass (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 4f9bfd1e0902247519c0c0611bd75d1b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4f9bfd1e0902247519c0c0611bd75d1b, type: 3}
 --- !u!4 &1047834858 stripped
@@ -2714,11 +2801,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1036896146}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 9ac771c9e070a4970b0e30d23ccb2244,
-        type: 3}
-      propertyPath: m_Name
-      value: Rock1 (1)
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 9ac771c9e070a4970b0e30d23ccb2244,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2779,6 +2861,16 @@ PrefabInstance:
       propertyPath: m_LocalScale.x
       value: 100.000015
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 9ac771c9e070a4970b0e30d23ccb2244,
+        type: 3}
+      propertyPath: m_Name
+      value: Rock1 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 9ac771c9e070a4970b0e30d23ccb2244,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9ac771c9e070a4970b0e30d23ccb2244, type: 3}
 --- !u!4 &1072982153 stripped
@@ -2794,11 +2886,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1036896146}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 225ac0142b794446fb4a75565bd50a81,
-        type: 3}
-      propertyPath: m_Name
-      value: Cactus1
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 225ac0142b794446fb4a75565bd50a81,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2868,6 +2955,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 45.915928
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 225ac0142b794446fb4a75565bd50a81,
+        type: 3}
+      propertyPath: m_Name
+      value: Cactus1
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 225ac0142b794446fb4a75565bd50a81,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 225ac0142b794446fb4a75565bd50a81, type: 3}
@@ -2968,11 +3065,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1036896146}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 225ac0142b794446fb4a75565bd50a81,
-        type: 3}
-      propertyPath: m_Name
-      value: Cactus1 (1)
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 225ac0142b794446fb4a75565bd50a81,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3043,6 +3135,16 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 43.415604
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 225ac0142b794446fb4a75565bd50a81,
+        type: 3}
+      propertyPath: m_Name
+      value: Cactus1 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 225ac0142b794446fb4a75565bd50a81,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 225ac0142b794446fb4a75565bd50a81, type: 3}
 --- !u!4 &1267733879 stripped
@@ -3058,11 +3160,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1036896146}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 4f9bfd1e0902247519c0c0611bd75d1b,
-        type: 3}
-      propertyPath: m_Name
-      value: Grass
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 4f9bfd1e0902247519c0c0611bd75d1b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3117,6 +3214,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 12.019001
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 4f9bfd1e0902247519c0c0611bd75d1b,
+        type: 3}
+      propertyPath: m_Name
+      value: Grass
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 4f9bfd1e0902247519c0c0611bd75d1b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4f9bfd1e0902247519c0c0611bd75d1b, type: 3}
@@ -3206,6 +3313,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -3217,6 +3325,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -3244,11 +3353,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 748245567}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 9ac771c9e070a4970b0e30d23ccb2244,
-        type: 3}
-      propertyPath: m_Name
-      value: Rock1 (2)
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 9ac771c9e070a4970b0e30d23ccb2244,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3314,6 +3418,16 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 100
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 9ac771c9e070a4970b0e30d23ccb2244,
+        type: 3}
+      propertyPath: m_Name
+      value: Rock1 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 9ac771c9e070a4970b0e30d23ccb2244,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9ac771c9e070a4970b0e30d23ccb2244, type: 3}
 --- !u!1 &1437953329
@@ -3376,6 +3490,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -3387,6 +3502,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -3467,6 +3583,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -3478,6 +3595,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -3584,6 +3702,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -3595,6 +3714,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -3661,6 +3781,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -3672,6 +3793,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -3739,11 +3861,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1036896146}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: b5038b625a70847f1acaa8c2aa6049ea,
-        type: 3}
-      propertyPath: m_Name
-      value: Rock2
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: b5038b625a70847f1acaa8c2aa6049ea,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3797,6 +3914,16 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: b5038b625a70847f1acaa8c2aa6049ea,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: b5038b625a70847f1acaa8c2aa6049ea,
+        type: 3}
+      propertyPath: m_Name
+      value: Rock2
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: b5038b625a70847f1acaa8c2aa6049ea,
+        type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -3880,11 +4007,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 748245567}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 06694f1a7a8544822b9402c98d602719,
-        type: 3}
-      propertyPath: m_Name
-      value: Tree2
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 06694f1a7a8544822b9402c98d602719,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3954,6 +4076,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 78.47902
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 06694f1a7a8544822b9402c98d602719,
+        type: 3}
+      propertyPath: m_Name
+      value: Tree2
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 06694f1a7a8544822b9402c98d602719,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 06694f1a7a8544822b9402c98d602719, type: 3}
@@ -4029,6 +4161,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -4040,6 +4173,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -4081,11 +4215,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1036896146}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: bf21357a8f9c64384b7d98941b0082bb,
-        type: 3}
-      propertyPath: m_Name
-      value: Cactus2 (1)
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: bf21357a8f9c64384b7d98941b0082bb,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4156,6 +4285,16 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 84.17201
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: bf21357a8f9c64384b7d98941b0082bb,
+        type: 3}
+      propertyPath: m_Name
+      value: Cactus2 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: bf21357a8f9c64384b7d98941b0082bb,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bf21357a8f9c64384b7d98941b0082bb, type: 3}
 --- !u!4 &1961931830 stripped
@@ -4189,11 +4328,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1036896146}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 9ac771c9e070a4970b0e30d23ccb2244,
-        type: 3}
-      propertyPath: m_Name
-      value: Rock1
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 9ac771c9e070a4970b0e30d23ccb2244,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4254,6 +4388,16 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 100
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 9ac771c9e070a4970b0e30d23ccb2244,
+        type: 3}
+      propertyPath: m_Name
+      value: Rock1
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 9ac771c9e070a4970b0e30d23ccb2244,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9ac771c9e070a4970b0e30d23ccb2244, type: 3}
 --- !u!4 &1987220518 stripped
@@ -4295,11 +4439,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1036896146}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 225ac0142b794446fb4a75565bd50a81,
-        type: 3}
-      propertyPath: m_Name
-      value: Cactus1 (2)
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 225ac0142b794446fb4a75565bd50a81,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4370,6 +4509,16 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 41.33105
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 225ac0142b794446fb4a75565bd50a81,
+        type: 3}
+      propertyPath: m_Name
+      value: Cactus1 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 225ac0142b794446fb4a75565bd50a81,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 225ac0142b794446fb4a75565bd50a81, type: 3}
 --- !u!4 &2032592660 stripped
@@ -4405,11 +4554,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 748245567}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 2de6c7c7f2f2f4a2b8d21682b37e8a21,
-        type: 3}
-      propertyPath: m_Name
-      value: Tree1 (3)
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 2de6c7c7f2f2f4a2b8d21682b37e8a21,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4480,6 +4624,16 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 59.34096
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 2de6c7c7f2f2f4a2b8d21682b37e8a21,
+        type: 3}
+      propertyPath: m_Name
+      value: Tree1 (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 2de6c7c7f2f2f4a2b8d21682b37e8a21,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2de6c7c7f2f2f4a2b8d21682b37e8a21, type: 3}
 --- !u!1001 &2074095876
@@ -4489,11 +4643,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1036896146}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 4f9bfd1e0902247519c0c0611bd75d1b,
-        type: 3}
-      propertyPath: m_Name
-      value: Grass (2)
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 4f9bfd1e0902247519c0c0611bd75d1b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4549,6 +4698,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 4f9bfd1e0902247519c0c0611bd75d1b,
+        type: 3}
+      propertyPath: m_Name
+      value: Grass (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 4f9bfd1e0902247519c0c0611bd75d1b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4f9bfd1e0902247519c0c0611bd75d1b, type: 3}
 --- !u!4 &2074095877 stripped
@@ -4590,11 +4749,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1190771719}
     m_Modifications:
-    - target: {fileID: 3743597651704331074, guid: ce71ddc64223549ed8fc19f77f5948b2,
-        type: 3}
-      propertyPath: m_Name
-      value: Forest Portal
-      objectReference: {fileID: 0}
     - target: {fileID: 3743597651704331073, guid: ce71ddc64223549ed8fc19f77f5948b2,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4650,6 +4804,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3743597651704331074, guid: ce71ddc64223549ed8fc19f77f5948b2,
+        type: 3}
+      propertyPath: m_Name
+      value: Forest Portal
+      objectReference: {fileID: 0}
     - target: {fileID: 3743597651704331078, guid: ce71ddc64223549ed8fc19f77f5948b2,
         type: 3}
       propertyPath: linkedPortal
@@ -4669,6 +4828,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1939129042, guid: 5101aee443b6c4e028aae23d799c5fa4, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1535381019623673784, guid: 5101aee443b6c4e028aae23d799c5fa4,
         type: 3}
       propertyPath: m_Name
@@ -4733,10 +4896,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 1939129042, guid: 5101aee443b6c4e028aae23d799c5fa4, type: 3}
-      propertyPath: m_Enabled
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5101aee443b6c4e028aae23d799c5fa4, type: 3}

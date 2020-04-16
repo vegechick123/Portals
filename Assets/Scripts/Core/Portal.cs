@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 public class Portal : MonoBehaviour {
     [Header ("Main Settings")]
     public Portal linkedPortal;
@@ -22,9 +21,10 @@ public class Portal : MonoBehaviour {
 
     void Awake () {
         playerCam = Camera.main;
-        portalCam = GetComponentInChildren<Camera> ();
+        portalCam = transform.parent.GetComponentInChildren<Camera>();
         portalCam.enabled = false;
         trackedTravellers = new List<PortalTraveller> ();
+        screen = GetComponent<MeshRenderer>();
         screenMeshFilter = screen.GetComponent<MeshFilter> ();
         screen.material.SetInt ("displayMask", 1);
     }
@@ -80,12 +80,14 @@ public class Portal : MonoBehaviour {
 
         CreateViewTexture ();
 
+
         var localToWorldMatrix = playerCam.transform.localToWorldMatrix;
         var renderPositions = new Vector3[recursionLimit];
         var renderRotations = new Quaternion[recursionLimit];
 
         int startIndex = 0;
         portalCam.projectionMatrix = playerCam.projectionMatrix;
+        
         for (int i = 0; i < recursionLimit; i++) {
             if (i > 0) {
                 // No need for recursive rendering if linked portal is not visible through this portal
@@ -93,6 +95,7 @@ public class Portal : MonoBehaviour {
                     break;
                 }
             }
+            
             localToWorldMatrix = transform.localToWorldMatrix * linkedPortal.transform.worldToLocalMatrix * localToWorldMatrix;
             int renderOrderIndex = recursionLimit - i - 1;
             renderPositions[renderOrderIndex] = localToWorldMatrix.GetColumn (3);
@@ -109,7 +112,7 @@ public class Portal : MonoBehaviour {
         for (int i = startIndex; i < recursionLimit; i++) {
             portalCam.transform.SetPositionAndRotation (renderPositions[i], renderRotations[i]);
             SetNearClipPlane ();
-            HandleClipping ();
+            //HandleClipping ();
             portalCam.Render ();
 
             if (i == startIndex) {
@@ -180,14 +183,14 @@ public class Portal : MonoBehaviour {
         foreach (var traveller in trackedTravellers) {
             UpdateSliceParams (traveller);
         }
-        ProtectScreenFromClipping (playerCam.transform.position);
+        //ProtectScreenFromClipping (playerCam.transform.position);
     }
     void CreateViewTexture () {
         if (viewTexture == null || viewTexture.width != Screen.width || viewTexture.height != Screen.height) {
             if (viewTexture != null) {
                 viewTexture.Release ();
             }
-            viewTexture = new RenderTexture (Screen.width, Screen.height, 0);
+            viewTexture = new RenderTexture (Screen.width, Screen.height, 16);
             // Render the view from the portal camera to the view texture
             portalCam.targetTexture = viewTexture;
             // Display the view texture on the screen of the linked portal

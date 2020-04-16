@@ -4,5 +4,11 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 0
+    path: Assets/Scenes/Two Worlds.unity
+    guid: 0d4d53604ed9c4858827702c6d7fa7fc
+  - enabled: 1
+    path: Assets/Scenes/Recursion.unity
+    guid: 40f36befccc724c5e9940662df244db8
   m_configObjects: {}
