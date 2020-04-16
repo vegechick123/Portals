@@ -47,7 +47,7 @@ public class Portal : MonoBehaviour {
             if (portalSide != portalSideOld) {
                 var positionOld = travellerT.position;
                 var rotOld = travellerT.rotation;
-                traveller.Teleport (transform, linkedPortal.transform, m.GetColumn (3), m.rotation);
+                traveller.Teleport (transform, traveller.graphicsClone.transform, m.GetColumn (3), m.rotation);
                 traveller.graphicsClone.transform.SetPositionAndRotation (positionOld, rotOld);
                 // Can't rely on OnTriggerEnter/Exit to be called next frame since it depends on when FixedUpdate runs
                 linkedPortal.OnTravellerEnterPortal (traveller);
@@ -187,7 +187,7 @@ public class Portal : MonoBehaviour {
             if (viewTexture != null) {
                 viewTexture.Release ();
             }
-            viewTexture = new RenderTexture (Screen.width, Screen.height, 0);
+            viewTexture = new RenderTexture (Screen.width, Screen.height, 24);
             // Render the view from the portal camera to the view texture
             portalCam.targetTexture = viewTexture;
             // Display the view texture on the screen of the linked portal
