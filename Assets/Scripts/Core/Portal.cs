@@ -6,6 +6,7 @@ public class Portal : MonoBehaviour {
     [Header ("Main Settings")]
     public Portal linkedPortal;
     public MeshRenderer screen;
+    public Material testMat;
     public int recursionLimit = 5;
 
     [Header ("Advanced Settings")]
@@ -16,6 +17,7 @@ public class Portal : MonoBehaviour {
     RenderTexture viewTexture;
     Camera portalCam;
     Camera playerCam;
+    
     Material firstRecursionMat;
     List<PortalTraveller> trackedTravellers;
     MeshFilter screenMeshFilter;
@@ -39,7 +41,7 @@ public class Portal : MonoBehaviour {
             PortalTraveller traveller = trackedTravellers[i];
             Transform travellerT = traveller.transform;
             var m = linkedPortal.transform.localToWorldMatrix * transform.worldToLocalMatrix * travellerT.localToWorldMatrix;
-
+         
             Vector3 offsetFromPortal = travellerT.position - transform.position;
             int portalSide = System.Math.Sign (Vector3.Dot (offsetFromPortal, transform.forward));
             int portalSideOld = System.Math.Sign (Vector3.Dot (traveller.previousOffsetFromPortal, transform.forward));
@@ -85,7 +87,14 @@ public class Portal : MonoBehaviour {
         var renderRotations = new Quaternion[recursionLimit];
 
         int startIndex = 0;
-        portalCam.projectionMatrix = playerCam.projectionMatrix;
+        //portalCam.fieldOfView = Mathf.Atan( Mathf.Tan(Mathf.Deg2Rad*playerCam.fieldOfView)*transform.lossyScale.y)/ Mathf.Deg2Rad;
+        //portalCam.aspect= playerCam.aspect / transform.lossyScale.y*transform.lossyScale.x;
+        Matrix4x4 matrix = playerCam.projectionMatrix;
+        float cotFOVd2 = 1/Mathf.Tan(Mathf.Atan(Mathf.Tan(Mathf.Deg2Rad * playerCam.fieldOfView/2) *transform.lossyScale.y));
+        float aspect= playerCam.aspect / transform.lossyScale.y * transform.lossyScale.x;
+        matrix[0,0]=cotFOVd2/aspect;
+        matrix[1,1]= cotFOVd2;
+        portalCam.projectionMatrix = matrix;
         for (int i = 0; i < recursionLimit; i++) {
             if (i > 0) {
                 // No need for recursive rendering if linked portal is not visible through this portal
@@ -109,7 +118,7 @@ public class Portal : MonoBehaviour {
         for (int i = startIndex; i < recursionLimit; i++) {
             portalCam.transform.SetPositionAndRotation (renderPositions[i], renderRotations[i]);
             SetNearClipPlane ();
-            HandleClipping ();
+            HandleClipping ();            
             portalCam.Render ();
 
             if (i == startIndex) {
@@ -190,9 +199,13 @@ public class Portal : MonoBehaviour {
             viewTexture = new RenderTexture (Screen.width, Screen.height, 24);
             // Render the view from the portal camera to the view texture
             portalCam.targetTexture = viewTexture;
+            if(testMat!=null)
+                testMat.mainTexture = viewTexture;
             // Display the view texture on the screen of the linked portal
+            
             linkedPortal.screen.material.SetTexture ("_MainTex", viewTexture);
         }
+
     }
 
     // Sets the thickness of the portal screen so as not to clip with camera near plane when player goes through
@@ -265,10 +278,11 @@ public class Portal : MonoBehaviour {
 
             // Update projection based on new clip plane
             // Calculate matrix with player cam so that player camera settings (fov, etc) are used
-            portalCam.projectionMatrix = playerCam.CalculateObliqueMatrix (clipPlaneCameraSpace);
+            portalCam.projectionMatrix = portalCam.CalculateObliqueMatrix (clipPlaneCameraSpace);
         } else {
-            portalCam.projectionMatrix = playerCam.projectionMatrix;
+            portalCam.projectionMatrix = portalCam.projectionMatrix;
         }
+        screen.material.SetMatrix("_proj", GL.GetGPUProjectionMatrix(portalCam.projectionMatrix, true));
     }
 
     void OnTravellerEnterPortal (PortalTraveller traveller) {
