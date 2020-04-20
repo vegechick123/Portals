@@ -51,14 +51,16 @@ public class Portal : MonoBehaviour {
                 var rotOld = travellerT.rotation;
                 traveller.Teleport (transform, traveller.graphicsClone.transform, m.GetColumn (3), m.rotation);
                 traveller.graphicsClone.transform.SetPositionAndRotation (positionOld, rotOld);
+                //traveller.graphicsClone.transform.localScale = linkedPortal.transform.lossyScale;
                 // Can't rely on OnTriggerEnter/Exit to be called next frame since it depends on when FixedUpdate runs
                 linkedPortal.OnTravellerEnterPortal (traveller);
                 trackedTravellers.RemoveAt (i);
                 i--;
 
             } else {
-                traveller.graphicsClone.transform.SetPositionAndRotation (m.GetColumn (3), m.rotation);
+                //traveller.graphicsClone.transform.SetPositionAndRotation (m.GetColumn (3), m.rotation);
                 //UpdateSliceParams (traveller);
+                traveller.graphicsClone.transform.localScale = linkedPortal.transform.lossyScale;
                 traveller.previousOffsetFromPortal = offsetFromPortal;
             }
         }
@@ -85,16 +87,8 @@ public class Portal : MonoBehaviour {
         var localToWorldMatrix = playerCam.transform.localToWorldMatrix;
         var renderPositions = new Vector3[recursionLimit];
         var renderRotations = new Quaternion[recursionLimit];
-
+        var renderMatrix = new Matrix4x4[recursionLimit];
         int startIndex = 0;
-        //portalCam.fieldOfView = Mathf.Atan( Mathf.Tan(Mathf.Deg2Rad*playerCam.fieldOfView)*transform.lossyScale.y)/ Mathf.Deg2Rad;
-        //portalCam.aspect= playerCam.aspect / transform.lossyScale.y*transform.lossyScale.x;
-        Matrix4x4 matrix = playerCam.projectionMatrix;
-        float cotFOVd2 = 1/Mathf.Tan(Mathf.Atan(Mathf.Tan(Mathf.Deg2Rad * playerCam.fieldOfView/2) *transform.lossyScale.y));
-        float aspect= playerCam.aspect / transform.lossyScale.y * transform.lossyScale.x;
-        matrix[0,0]=cotFOVd2/aspect;
-        matrix[1,1]= cotFOVd2;
-        portalCam.projectionMatrix = matrix;
         for (int i = 0; i < recursionLimit; i++) {
             if (i > 0) {
                 // No need for recursive rendering if linked portal is not visible through this portal
@@ -106,7 +100,8 @@ public class Portal : MonoBehaviour {
             int renderOrderIndex = recursionLimit - i - 1;
             renderPositions[renderOrderIndex] = localToWorldMatrix.GetColumn (3);
             renderRotations[renderOrderIndex] = localToWorldMatrix.rotation;
-
+            renderMatrix[renderOrderIndex] = localToWorldMatrix;
+            //portalCam.transform.localToWorldMatrix = localToWorldMatrix;
             portalCam.transform.SetPositionAndRotation (renderPositions[renderOrderIndex], renderRotations[renderOrderIndex]);
             startIndex = renderOrderIndex;
         }
@@ -116,9 +111,14 @@ public class Portal : MonoBehaviour {
         linkedPortal.screen.material.SetInt ("displayMask", 0);
 
         for (int i = startIndex; i < recursionLimit; i++) {
-            portalCam.transform.SetPositionAndRotation (renderPositions[i], renderRotations[i]);
-            SetNearClipPlane ();
-            HandleClipping ();            
+            portalCam.transform.SetPositionAndRotation(renderPositions[i], renderRotations[i]);
+            portalCam.ResetWorldToCameraMatrix();
+
+
+            SetNearClipPlane();
+            HandleScale();
+            HandleClipping ();
+            
             portalCam.Render ();
 
             if (i == startIndex) {
@@ -129,7 +129,32 @@ public class Portal : MonoBehaviour {
         // Unhide objects hidden at start of render
         screen.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
     }
+    void SetNearClipPlane()
+    {
+        // Learning resource:
+        // http://www.terathon.com/lengyel/Lengyel-Oblique.pdf
+        Transform clipPlane = transform;
+        int dot = System.Math.Sign(Vector3.Dot(clipPlane.forward,  transform.position-portalCamPos));
 
+        Vector3 camSpacePos = portalCam.worldToCameraMatrix.MultiplyPoint(clipPlane.position);
+        Vector3 camSpaceNormal = portalCam.worldToCameraMatrix.MultiplyVector(clipPlane.forward) * dot;
+        float camSpaceDst = -Vector3.Dot(camSpacePos, camSpaceNormal) + nearClipOffset;
+
+        // Don't use oblique clip plane if very close to portal as it seems this can cause some visual artifacts
+        if (Mathf.Abs(camSpaceDst) > nearClipLimit)
+        {
+            Vector4 clipPlaneCameraSpace = new Vector4(camSpaceNormal.x, camSpaceNormal.y, camSpaceNormal.z, camSpaceDst);
+
+            // Update projection based on new clip plane
+            // Calculate matrix with player cam so that player camera settings (fov, etc) are used
+            portalCam.projectionMatrix = playerCam.CalculateObliqueMatrix(clipPlaneCameraSpace);
+        }
+        else
+        {
+            portalCam.projectionMatrix = playerCam.projectionMatrix;
+        }
+
+    }
     void HandleClipping () {
         // There are two main graphical issues when slicing travellers
         // 1. Tiny sliver of mesh drawn on backside of portal
@@ -139,7 +164,7 @@ public class Portal : MonoBehaviour {
         // Would be great if this could be fixed more elegantly, but this is the best I can figure out for now
         const float hideDst = -1000;
         const float showDst = 1000;
-        float screenThickness = linkedPortal.ProtectScreenFromClipping (portalCam.transform.position);
+        float screenThickness = linkedPortal.ProtectScreenFromClipping (portalCamPos);
 
         foreach (var traveller in trackedTravellers) {
             if (SameSideOfPortal (traveller.transform.position, portalCamPos)) {
@@ -262,27 +287,21 @@ public class Portal : MonoBehaviour {
 
     // Use custom projection matrix to align portal camera's near clip plane with the surface of the portal
     // Note that this affects precision of the depth buffer, which can cause issues with effects like screenspace AO
-    void SetNearClipPlane () {
-        // Learning resource:
-        // http://www.terathon.com/lengyel/Lengyel-Oblique.pdf
-        Transform clipPlane = transform;
-        int dot = System.Math.Sign (Vector3.Dot (clipPlane.forward, transform.position - portalCam.transform.position));
-
-        Vector3 camSpacePos = portalCam.worldToCameraMatrix.MultiplyPoint (clipPlane.position);
-        Vector3 camSpaceNormal = portalCam.worldToCameraMatrix.MultiplyVector (clipPlane.forward) * dot;
-        float camSpaceDst = -Vector3.Dot (camSpacePos, camSpaceNormal) + nearClipOffset;
-
-        // Don't use oblique clip plane if very close to portal as it seems this can cause some visual artifacts
-        if (Mathf.Abs (camSpaceDst) > nearClipLimit) {
-            Vector4 clipPlaneCameraSpace = new Vector4 (camSpaceNormal.x, camSpaceNormal.y, camSpaceNormal.z, camSpaceDst);
-
-            // Update projection based on new clip plane
-            // Calculate matrix with player cam so that player camera settings (fov, etc) are used
-            portalCam.projectionMatrix = portalCam.CalculateObliqueMatrix (clipPlaneCameraSpace);
-        } else {
-            portalCam.projectionMatrix = portalCam.projectionMatrix;
-        }
-        screen.material.SetMatrix("_proj", GL.GetGPUProjectionMatrix(portalCam.projectionMatrix, true));
+    
+    void HandleScale()
+    {
+        
+        Vector3 scale = MyFunc.Div(linkedPortal.transform.lossyScale, transform.lossyScale);
+        Vector3 distance = portalCam.transform.InverseTransformPoint(portalCam.transform.position);
+        distance = MyFunc.Mul(distance, scale);
+        Matrix4x4 matrix= Matrix4x4.identity;
+        matrix[2, 2] = -1;
+        matrix *= portalCam.transform.worldToLocalMatrix;
+        //matrix *= Matrix4x4.TRS(portalCam.transform.position, portalCam.transform.rotation, portalCam.transform.lossyScale).inverse;
+        //matrix *= Matrix4x4.TRS(portalCam.transform.position, portalCam.transform.rotation, MyFunc.Div(portalCam.transform.lossyScale, linkedPortal.portalCam.transform.lossyScale)).inverse;//MyFunc.Div(portalCam.transform.lossyScale,linkedPortal.portalCam.transform.lossyScale)) ;
+        portalCam.worldToCameraMatrix =matrix;//* Matrix4x4.TRS(transform.position, transform.rotation,new Vector3(1,1,1)) * Matrix4x4.TRS(transform.position, transform.rotation, transform.lossyScale).inverse;// * transform.localToWorldMatrix;
+        //transform.localToWorldMatrix.inverse;
+        //Matrix4x4.TRS(transform.position, transform.rotation,transform.lossyScale)
     }
 
     void OnTravellerEnterPortal (PortalTraveller traveller) {

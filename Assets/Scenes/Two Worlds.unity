@@ -5484,6 +5484,11 @@ PrefabInstance:
       propertyPath: testMat
       value: 
       objectReference: {fileID: 2100000, guid: c1e71155d7d01354481573ef62cc0de9, type: 2}
+    - target: {fileID: 2371249369590732133, guid: 8ea8df03664b4d34995cd88f7c09a5a4,
+        type: 3}
+      propertyPath: recursionLimit
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 2871145284191878772, guid: 8ea8df03664b4d34995cd88f7c09a5a4,
         type: 3}
       propertyPath: m_LocalRotation.x
@@ -5527,12 +5532,12 @@ PrefabInstance:
     - target: {fileID: 8292683787971356606, guid: 8ea8df03664b4d34995cd88f7c09a5a4,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -53.97
+      value: -53.179
       objectReference: {fileID: 0}
     - target: {fileID: 8292683787971356606, guid: 8ea8df03664b4d34995cd88f7c09a5a4,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.36
+      value: 1.517
       objectReference: {fileID: 0}
     - target: {fileID: 8292683787971356606, guid: 8ea8df03664b4d34995cd88f7c09a5a4,
         type: 3}
@@ -5578,6 +5583,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8292683787971356606, guid: 8ea8df03664b4d34995cd88f7c09a5a4,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8ea8df03664b4d34995cd88f7c09a5a4, type: 3}
@@ -5850,6 +5860,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Lightmapping
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4143047973531944825, guid: 0826725f2f13b469a8384b1245f86da3,
+        type: 3}
+      propertyPath: m_BoundingSphereOverride.x
+      value: 5.87e-43
+      objectReference: {fileID: 0}
+    - target: {fileID: 4143047973531944825, guid: 0826725f2f13b469a8384b1245f86da3,
+        type: 3}
+      propertyPath: m_BoundingSphereOverride.y
+      value: 1.5336858e+9
+      objectReference: {fileID: 0}
+    - target: {fileID: 4143047973531944825, guid: 0826725f2f13b469a8384b1245f86da3,
+        type: 3}
+      propertyPath: m_BoundingSphereOverride.z
+      value: 4.5905e-41
+      objectReference: {fileID: 0}
+    - target: {fileID: 4143047973531944825, guid: 0826725f2f13b469a8384b1245f86da3,
+        type: 3}
+      propertyPath: m_BoundingSphereOverride.w
+      value: 1.5335772e+9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0826725f2f13b469a8384b1245f86da3, type: 3}
@@ -6538,6 +6568,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8292683787971356606, guid: 8ea8df03664b4d34995cd88f7c09a5a4,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8ea8df03664b4d34995cd88f7c09a5a4, type: 3}

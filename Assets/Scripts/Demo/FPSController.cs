@@ -134,10 +134,18 @@ public class FPSController : PortalTraveller {
         }
 
     }
-
+    private void LateUpdate()
+    {
+        Matrix4x4 matrix = Matrix4x4.identity;
+        matrix[2, 2] = -1;
+        matrix *= cam.transform.worldToLocalMatrix;
+        cam.worldToCameraMatrix = matrix;
+    }
+    
     public override void Teleport (Transform fromPortal, Transform toPortal, Vector3 pos, Quaternion rot) {
         transform.position = pos;
         transform.rotation = rot;
+        transform.localScale= toPortal.lossyScale;
         rigibody.velocity = transform.TransformDirection(velocity);
         
         //Vector3 eulerRot = rot.eulerAngles;
@@ -147,6 +155,10 @@ public class FPSController : PortalTraveller {
         //transform.eulerAngles = Vector3.up * smoothYaw;
         //velocity = toPortal.TransformVector (fromPortal.InverseTransformVector (velocity));
         Physics.SyncTransforms ();
+        Matrix4x4 matrix = Matrix4x4.identity;
+        matrix[2, 2] = -1;
+        matrix *= cam.transform.worldToLocalMatrix;
+        cam.worldToCameraMatrix = matrix;
     }
 
 }

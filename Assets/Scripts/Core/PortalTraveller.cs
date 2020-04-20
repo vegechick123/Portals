@@ -24,6 +24,7 @@ public class PortalTraveller : MonoBehaviour {
             originalMaterials = GetMaterials (graphicsObject);
             cloneMaterials = GetMaterials (graphicsClone);
         } else {
+
             graphicsClone.SetActive (true);
         }
     }

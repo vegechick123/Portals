@@ -32,14 +32,12 @@ Shader "Custom/Portal"
             sampler2D _MainTex;
             float4 _InactiveColour;
             int displayMask; // set to 1 to display texture, otherwise will draw test colour
-            float4x4 _proj;
 
             v2f vert (appdata v)
             {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
-                //o.screenPos = ComputeScreenPos(o.vertex);
-                o.screenPos = ComputeScreenPos(mul(_proj,float4(UnityObjectToViewPos(v.vertex),1)));
+                o.screenPos = ComputeScreenPos(o.vertex);
                 return o;
             }
 
