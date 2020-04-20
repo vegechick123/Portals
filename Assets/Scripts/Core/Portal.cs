@@ -21,11 +21,12 @@ public class Portal : MonoBehaviour {
     Material firstRecursionMat;
     List<PortalTraveller> trackedTravellers;
     MeshFilter screenMeshFilter;
-
+    public bool DebugButton;
     void Awake () {
         playerCam = Camera.main;
         portalCam = GetComponentInChildren<Camera> ();
         portalCam.enabled = false;
+        portalCam.projectionMatrix = playerCam.projectionMatrix;
         trackedTravellers = new List<PortalTraveller> ();
         screenMeshFilter = screen.GetComponent<MeshFilter> ();
         screen.material.SetInt ("displayMask", 1);
@@ -58,7 +59,7 @@ public class Portal : MonoBehaviour {
                 i--;
 
             } else {
-                //traveller.graphicsClone.transform.SetPositionAndRotation (m.GetColumn (3), m.rotation);
+                traveller.graphicsClone.transform.SetPositionAndRotation (m.GetColumn (3), m.rotation);  
                 //UpdateSliceParams (traveller);
                 traveller.graphicsClone.transform.localScale = linkedPortal.transform.lossyScale;
                 traveller.previousOffsetFromPortal = offsetFromPortal;
@@ -290,20 +291,34 @@ public class Portal : MonoBehaviour {
     
     void HandleScale()
     {
+        Vector3 originScale = portalCam.transform.localScale;
         
-        Vector3 scale = MyFunc.Div(linkedPortal.transform.lossyScale, transform.lossyScale);
-        Vector3 distance = portalCam.transform.InverseTransformPoint(portalCam.transform.position);
-        distance = MyFunc.Mul(distance, scale);
-        Matrix4x4 matrix= Matrix4x4.identity;
-        matrix[2, 2] = -1;
-        matrix *= portalCam.transform.worldToLocalMatrix;
-        //matrix *= Matrix4x4.TRS(portalCam.transform.position, portalCam.transform.rotation, portalCam.transform.lossyScale).inverse;
-        //matrix *= Matrix4x4.TRS(portalCam.transform.position, portalCam.transform.rotation, MyFunc.Div(portalCam.transform.lossyScale, linkedPortal.portalCam.transform.lossyScale)).inverse;//MyFunc.Div(portalCam.transform.lossyScale,linkedPortal.portalCam.transform.lossyScale)) ;
-        portalCam.worldToCameraMatrix =matrix;//* Matrix4x4.TRS(transform.position, transform.rotation,new Vector3(1,1,1)) * Matrix4x4.TRS(transform.position, transform.rotation, transform.lossyScale).inverse;// * transform.localToWorldMatrix;
+        Matrix4x4 Mv = playerCam.worldToCameraMatrix;
+        Matrix4x4 Mtrs = linkedPortal.transform.localToWorldMatrix;
+        Matrix4x4 Mt = Matrix4x4.Translate(linkedPortal.transform.position - transform.position);
+        Matrix4x4 invMtrs_ = transform.worldToLocalMatrix;
+        Matrix4x4 Mtrs_ = transform.localToWorldMatrix;
+        Matrix4x4 Mv_ = Mv * Mtrs * invMtrs_;
+        if (DebugButton)
+        {
+            
+            Debug.Log("Mv:"+playerCam.worldToCameraMatrix);
+            Debug.Log("Mtrs:"+ linkedPortal.transform.localToWorldMatrix);
+            //Debug.Log("Mt:" + Mt);
+            Debug.Log("invMtrs':" + invMtrs_);
+            Debug.Log("Mtrs':" + Mtrs_);
+            Debug.Log("Mv':" + Mv_);
+            Debug.Log("Mv  * M: " + Mv * Mtrs);
+            Debug.Log("Mv' * M':" + Mv_ * Mtrs_);
+            Debug.Log("projection:" + portalCam.projectionMatrix);
+            Debug.Log("projection:" + playerCam.projectionMatrix);
+        }
+        portalCam.worldToCameraMatrix =Mv_;
         //transform.localToWorldMatrix.inverse;
         //Matrix4x4.TRS(transform.position, transform.rotation,transform.lossyScale)
+        portalCam.transform.localScale = originScale;
     }
-
+    
     void OnTravellerEnterPortal (PortalTraveller traveller) {
         if (!trackedTravellers.Contains (traveller)) {
             traveller.EnterPortalThreshold ();
