@@ -52,7 +52,7 @@ public class Portal : MonoBehaviour {
                 var rotOld = travellerT.rotation;
                 traveller.Teleport (transform, traveller.graphicsClone.transform, m.GetColumn (3), m.rotation);
                 traveller.graphicsClone.transform.SetPositionAndRotation (positionOld, rotOld);
-                //traveller.graphicsClone.transform.localScale = linkedPortal.transform.lossyScale;
+                traveller.graphicsClone.transform.localScale = MyFunc.Div(transform.lossyScale, linkedPortal.transform.lossyScale);
                 // Can't rely on OnTriggerEnter/Exit to be called next frame since it depends on when FixedUpdate runs
                 linkedPortal.OnTravellerEnterPortal (traveller);
                 trackedTravellers.RemoveAt (i);
@@ -61,7 +61,7 @@ public class Portal : MonoBehaviour {
             } else {
                 traveller.graphicsClone.transform.SetPositionAndRotation (m.GetColumn (3), m.rotation);  
                 //UpdateSliceParams (traveller);
-                traveller.graphicsClone.transform.localScale = linkedPortal.transform.lossyScale;
+                traveller.graphicsClone.transform.localScale =MyFunc.Div(linkedPortal.transform.lossyScale,transform.lossyScale);
                 traveller.previousOffsetFromPortal = offsetFromPortal;
             }
         }
@@ -80,14 +80,12 @@ public class Portal : MonoBehaviour {
 
         // Skip rendering the view from this portal if player is not looking at the linked portal
         if (!CameraUtility.VisibleFromCamera (linkedPortal.screen, playerCam)) {
-            return;
+            //return;
         }
 
         CreateViewTexture ();
 
-        var localToWorldMatrix = playerCam.transform.localToWorldMatrix;
-        var renderPositions = new Vector3[recursionLimit];
-        var renderRotations = new Quaternion[recursionLimit];
+        var localToWorldMatrix = playerCam.worldToCameraMatrix;
         var renderMatrix = new Matrix4x4[recursionLimit];
         int startIndex = 0;
         for (int i = 0; i < recursionLimit; i++) {
@@ -97,38 +95,36 @@ public class Portal : MonoBehaviour {
                     break;
                 }
             }
-            localToWorldMatrix = transform.localToWorldMatrix * linkedPortal.transform.worldToLocalMatrix * localToWorldMatrix;
+            localToWorldMatrix = localToWorldMatrix*linkedPortal.transform.localToWorldMatrix* transform.worldToLocalMatrix;
             int renderOrderIndex = recursionLimit - i - 1;
-            renderPositions[renderOrderIndex] = localToWorldMatrix.GetColumn (3);
-            renderRotations[renderOrderIndex] = localToWorldMatrix.rotation;
             renderMatrix[renderOrderIndex] = localToWorldMatrix;
-            //portalCam.transform.localToWorldMatrix = localToWorldMatrix;
-            portalCam.transform.SetPositionAndRotation (renderPositions[renderOrderIndex], renderRotations[renderOrderIndex]);
             startIndex = renderOrderIndex;
         }
 
         // Hide screen so that camera can see through portal
         screen.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly;
+       // screen.enabled= false;
         linkedPortal.screen.material.SetInt ("displayMask", 0);
 
         for (int i = startIndex; i < recursionLimit; i++) {
-            portalCam.transform.SetPositionAndRotation(renderPositions[i], renderRotations[i]);
-            portalCam.ResetWorldToCameraMatrix();
+            portalCam.worldToCameraMatrix = renderMatrix[i];
+            //portalCam.ResetWorldToCameraMatrix();
 
 
             SetNearClipPlane();
-            HandleScale();
-            HandleClipping ();
-            
+            //HandleScale();
+            //HandleClipping ();
+            if(DebugButton)
+            Debug.Log(portalCam.cameraToWorldMatrix.GetColumn(3));
             portalCam.Render ();
 
             if (i == startIndex) {
                 linkedPortal.screen.material.SetInt ("displayMask", 1);
             }
         }
-
+        //screen.enabled = true;
         // Unhide objects hidden at start of render
-        screen.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
+        screen.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
     }
     void SetNearClipPlane()
     {
@@ -291,7 +287,6 @@ public class Portal : MonoBehaviour {
     
     void HandleScale()
     {
-        Vector3 originScale = portalCam.transform.localScale;
         
         Matrix4x4 Mv = playerCam.worldToCameraMatrix;
         Matrix4x4 Mtrs = linkedPortal.transform.localToWorldMatrix;
@@ -314,9 +309,6 @@ public class Portal : MonoBehaviour {
             Debug.Log("projection:" + playerCam.projectionMatrix);
         }
         portalCam.worldToCameraMatrix =Mv_;
-        //transform.localToWorldMatrix.inverse;
-        //Matrix4x4.TRS(transform.position, transform.rotation,transform.lossyScale)
-        portalCam.transform.localScale = originScale;
     }
     
     void OnTravellerEnterPortal (PortalTraveller traveller) {
