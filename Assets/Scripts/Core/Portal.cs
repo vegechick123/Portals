@@ -12,7 +12,7 @@ public class Portal : MonoBehaviour {
     [Header ("Advanced Settings")]
     public float nearClipOffset = 0.05f;
     public float nearClipLimit = 0.2f;
-
+    public float sliceOffset = 0.2f;
     // Private variables
     RenderTexture viewTexture;
     Camera portalCam;
@@ -64,6 +64,8 @@ public class Portal : MonoBehaviour {
                 traveller.graphicsClone.transform.localScale =MyFunc.Div(linkedPortal.transform.lossyScale,transform.lossyScale);
                 traveller.previousOffsetFromPortal = offsetFromPortal;
             }
+            Debug.Log(linkedPortal.portalCam.transform.worldToLocalMatrix * m);
+            Debug.Log(portalCam.transform.worldToLocalMatrix * traveller.graphicsObject.transform.localToWorldMatrix);
         }
     }
 
@@ -232,13 +234,13 @@ public class Portal : MonoBehaviour {
     float ProtectScreenFromClipping (Vector3 viewPoint) {
         float halfHeight = playerCam.nearClipPlane * Mathf.Tan (playerCam.fieldOfView * 0.5f * Mathf.Deg2Rad);
         float halfWidth = halfHeight * playerCam.aspect;
-        float dstToNearClipPlaneCorner = new Vector3 (halfWidth, halfHeight, playerCam.nearClipPlane).magnitude;
-        float screenThickness = dstToNearClipPlaneCorner;
+        float dstToNearClipPlaneCorner =Vector3.Scale(playerCam.transform.lossyScale,new Vector3 (halfWidth, halfHeight, playerCam.nearClipPlane)).magnitude;
+        float screenThickness = dstToNearClipPlaneCorner+sliceOffset;
 
         Transform screenT = screen.transform;
         bool camFacingSameDirAsPortal = Vector3.Dot (transform.forward, transform.position - viewPoint) > 0;
         screenT.localScale = new Vector3 (screenT.localScale.x, screenT.localScale.y, screenThickness);
-        screenT.localPosition = Vector3.forward * screenThickness * ((camFacingSameDirAsPortal) ? 0.5f : -0.5f);
+        screenT.localPosition = Vector3.forward * screenThickness * ((camFacingSameDirAsPortal) ? 1f: -1f);
         return screenThickness;
     }
 

@@ -209,8 +209,9 @@ MonoBehaviour:
   screen: {fileID: 5176014683215476065}
   testMat: {fileID: 0}
   recursionLimit: 3
-  nearClipOffset: 0.05
+  nearClipOffset: 0.1
   nearClipLimit: 0.2
+  sliceOffset: 0
   DebugButton: 0
 --- !u!65 &1924489576338817571
 BoxCollider:
