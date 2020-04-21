@@ -52,7 +52,7 @@ public class Portal : MonoBehaviour {
                 var rotOld = travellerT.rotation;
                 traveller.Teleport (transform, traveller.graphicsClone.transform, m.GetColumn (3), m.rotation);
                 traveller.graphicsClone.transform.SetPositionAndRotation (positionOld, rotOld);
-                //traveller.graphicsClone.transform.localScale = linkedPortal.transform.lossyScale;
+                traveller.graphicsClone.transform.localScale = MyFunc.Div(transform.lossyScale, linkedPortal.transform.lossyScale);
                 // Can't rely on OnTriggerEnter/Exit to be called next frame since it depends on when FixedUpdate runs
                 linkedPortal.OnTravellerEnterPortal (traveller);
                 trackedTravellers.RemoveAt (i);
@@ -61,7 +61,7 @@ public class Portal : MonoBehaviour {
             } else {
                 traveller.graphicsClone.transform.SetPositionAndRotation (m.GetColumn (3), m.rotation);  
                 //UpdateSliceParams (traveller);
-                traveller.graphicsClone.transform.localScale = linkedPortal.transform.lossyScale;
+                traveller.graphicsClone.transform.localScale =MyFunc.Div(linkedPortal.transform.lossyScale,transform.lossyScale);
                 traveller.previousOffsetFromPortal = offsetFromPortal;
             }
         }
@@ -85,9 +85,7 @@ public class Portal : MonoBehaviour {
 
         CreateViewTexture ();
 
-        var localToWorldMatrix = playerCam.transform.localToWorldMatrix;
-        var renderPositions = new Vector3[recursionLimit];
-        var renderRotations = new Quaternion[recursionLimit];
+        var localToWorldMatrix = playerCam.worldToCameraMatrix;
         var renderMatrix = new Matrix4x4[recursionLimit];
         int startIndex = 0;
         for (int i = 0; i < recursionLimit; i++) {
@@ -97,27 +95,21 @@ public class Portal : MonoBehaviour {
                     break;
                 }
             }
-            localToWorldMatrix = transform.localToWorldMatrix * linkedPortal.transform.worldToLocalMatrix * localToWorldMatrix;
+            localToWorldMatrix = localToWorldMatrix * linkedPortal.transform.localToWorldMatrix * transform.worldToLocalMatrix;
             int renderOrderIndex = recursionLimit - i - 1;
-            renderPositions[renderOrderIndex] = localToWorldMatrix.GetColumn (3);
-            renderRotations[renderOrderIndex] = localToWorldMatrix.rotation;
             renderMatrix[renderOrderIndex] = localToWorldMatrix;
-            //portalCam.transform.localToWorldMatrix = localToWorldMatrix;
-            portalCam.transform.SetPositionAndRotation (renderPositions[renderOrderIndex], renderRotations[renderOrderIndex]);
             startIndex = renderOrderIndex;
         }
 
         // Hide screen so that camera can see through portal
-        screen.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly;
+        screen.enabled = false;
         linkedPortal.screen.material.SetInt ("displayMask", 0);
 
         for (int i = startIndex; i < recursionLimit; i++) {
-            portalCam.transform.SetPositionAndRotation(renderPositions[i], renderRotations[i]);
-            portalCam.ResetWorldToCameraMatrix();
-
+            portalCam.worldToCameraMatrix = renderMatrix[i];
 
             SetNearClipPlane();
-            HandleScale();
+            //HandleScale();
             HandleClipping ();
             
             portalCam.Render ();
@@ -128,7 +120,7 @@ public class Portal : MonoBehaviour {
         }
 
         // Unhide objects hidden at start of render
-        screen.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
+        screen.enabled = true;
     }
     void SetNearClipPlane()
     {
@@ -139,7 +131,9 @@ public class Portal : MonoBehaviour {
 
         Vector3 camSpacePos = portalCam.worldToCameraMatrix.MultiplyPoint(clipPlane.position);
         Vector3 camSpaceNormal = portalCam.worldToCameraMatrix.MultiplyVector(clipPlane.forward) * dot;
-        float camSpaceDst = -Vector3.Dot(camSpacePos, camSpaceNormal) + nearClipOffset;
+        float scalez = Mathf.Sqrt((portalCam.cameraToWorldMatrix[0, 2] * portalCam.cameraToWorldMatrix[0, 2] + portalCam.cameraToWorldMatrix[2, 2] * portalCam.cameraToWorldMatrix[2, 2]));
+        //Debug.Log(scalez);
+        float camSpaceDst = -Vector3.Dot(camSpacePos, camSpaceNormal) + nearClipOffset/scalez;
 
         // Don't use oblique clip plane if very close to portal as it seems this can cause some visual artifacts
         if (Mathf.Abs(camSpaceDst) > nearClipLimit)
@@ -356,7 +350,7 @@ public class Portal : MonoBehaviour {
 
     Vector3 portalCamPos {
         get {
-            return portalCam.transform.position;
+            return portalCam.cameraToWorldMatrix.GetColumn(3);
         }
     }
 

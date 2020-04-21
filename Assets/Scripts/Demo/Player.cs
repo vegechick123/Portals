@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FPSController : PortalTraveller {
+public class Player : PortalTraveller {
+
+    public static Player player;
 
     public float walkSpeed = 3;
     public float runSpeed = 6;
@@ -43,6 +45,10 @@ public class FPSController : PortalTraveller {
     bool disabled;
     private void Awake()
     {
+        if (player == null)
+            player = this;
+        else
+            Debug.LogError("多个玩家");
         rigibody = GetComponent<Rigidbody>();
     }
     void Start () {
@@ -148,12 +154,6 @@ public class FPSController : PortalTraveller {
         transform.localScale= toPortal.lossyScale;
         rigibody.velocity = transform.TransformDirection(velocity);
         
-        //Vector3 eulerRot = rot.eulerAngles;
-        //float delta = Mathf.DeltaAngle (smoothYaw, eulerRot.y);
-        //yaw += delta;
-        //smoothYaw += delta;
-        //transform.eulerAngles = Vector3.up * smoothYaw;
-        //velocity = toPortal.TransformVector (fromPortal.InverseTransformVector (velocity));
         Physics.SyncTransforms ();
         Matrix4x4 matrix = Matrix4x4.identity;
         matrix[2, 2] = -1;
