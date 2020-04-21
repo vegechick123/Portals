@@ -15,6 +15,7 @@ public class Portal : MonoBehaviour {
     public float sliceOffset = 0.2f;
     // Private variables
     RenderTexture viewTexture;
+    RenderTexture viewBuffer;
     Camera portalCam;
     Camera playerCam;
     
@@ -85,8 +86,8 @@ public class Portal : MonoBehaviour {
             return;
         }
 
-        CreateViewTexture ();
-
+        CreateViewTexture();
+        CreateViewBuffer();
         var localToWorldMatrix = playerCam.worldToCameraMatrix;
         var renderMatrix = new Matrix4x4[recursionLimit];
         int startIndex = 0;
@@ -115,7 +116,7 @@ public class Portal : MonoBehaviour {
             HandleClipping ();
             
             portalCam.Render ();
-
+            Graphics.Blit(viewBuffer, viewTexture);
             if (i == startIndex) {
                 linkedPortal.screen.material.SetInt ("displayMask", 1);
             }
@@ -220,14 +221,30 @@ public class Portal : MonoBehaviour {
             }
             viewTexture = new RenderTexture (Screen.width, Screen.height, 24);
             // Render the view from the portal camera to the view texture
-            portalCam.targetTexture = viewTexture;
             if(testMat!=null)
                 testMat.mainTexture = viewTexture;
             // Display the view texture on the screen of the linked portal
             
             linkedPortal.screen.material.SetTexture ("_MainTex", viewTexture);
         }
+    }
+    void CreateViewBuffer()
+    {
+        if (viewBuffer == null || viewBuffer.width != Screen.width || viewBuffer.height != Screen.height)
+        {
+            if (viewBuffer != null)
+            {
+                viewBuffer.Release();
+            }
+            viewBuffer = new RenderTexture(Screen.width, Screen.height, 24);
+            portalCam.targetTexture = viewBuffer;
+            // Render the view from the portal camera to the view texture
+            if (testMat != null)
+                testMat.mainTexture = viewBuffer;
+            // Display the view texture on the screen of the linked portal
 
+            linkedPortal.screen.material.SetTexture("_MainTex", viewBuffer);
+        }
     }
 
     // Sets the thickness of the portal screen so as not to clip with camera near plane when player goes through
