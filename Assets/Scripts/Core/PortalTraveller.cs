@@ -13,6 +13,7 @@ public class PortalTraveller : MonoBehaviour {
     public virtual void Teleport (Transform fromPortal, Transform toPortal, Vector3 pos, Quaternion rot) {
         transform.position = pos;
         transform.rotation = rot;
+        transform.localScale = toPortal.lossyScale;
     }
 
     // Called when first touches portal

@@ -64,6 +64,8 @@ public class Player : PortalTraveller {
         pitch = cam.transform.localEulerAngles.x;
         smoothYaw = yaw;
         smoothPitch = pitch;
+
+        
     }
     private void FixedUpdate()
     {
@@ -100,21 +102,7 @@ public class Player : PortalTraveller {
 
 
         // Verrrrrry gross hack to stop camera swinging down at start
-        float mMag = Mathf.Sqrt(mX * mX + mY * mY);
-        if (mMag > 5)
-        {
-            mX = 0;
-            mY = 0;
-        }
-
-        yaw += mX * mouseSensitivity;
-        pitch -= mY * mouseSensitivity;
-        pitch = Mathf.Clamp(pitch, pitchMinMax.x, pitchMinMax.y);
-        smoothPitch = Mathf.SmoothDampAngle(smoothPitch, pitch, ref pitchSmoothV, rotationSmoothTime);
-        smoothYaw = Mathf.SmoothDampAngle(smoothYaw, yaw, ref yawSmoothV, rotationSmoothTime);
-        transform.
-        transform.rotation *= Quaternion.Euler(Vector3.up * mX*mouseSensitivity);
-        cam.transform.localEulerAngles = Vector3.right * smoothPitch;
+        
     }
     void UpdateInputs()
     {
@@ -138,7 +126,21 @@ public class Player : PortalTraveller {
         if (disabled) {
             return;
         }
+        float mMag = Mathf.Sqrt(mX * mX + mY * mY);
+        if (mMag > 5)
+        {
+            mX = 0;
+            mY = 0;
+        }
 
+        yaw += mX * mouseSensitivity;
+        pitch -= mY * mouseSensitivity;
+        pitch = Mathf.Clamp(pitch, pitchMinMax.x, pitchMinMax.y);
+        smoothPitch = Mathf.SmoothDampAngle(smoothPitch, pitch, ref pitchSmoothV, rotationSmoothTime);
+        smoothYaw = Mathf.SmoothDampAngle(smoothYaw, yaw, ref yawSmoothV, rotationSmoothTime);
+        transform.
+        transform.rotation *= Quaternion.Euler(Vector3.up * mX * mouseSensitivity);
+        cam.transform.localEulerAngles = Vector3.right * smoothPitch;
     }
     private void LateUpdate()
     {

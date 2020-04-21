@@ -10,7 +10,7 @@ public class Car : PortalTraveller {
 
     void Start () {
         Debug.Log ("Press C to stop/start car");
-        targetSpeed = maxSpeed;
+        targetSpeed = 0;// maxSpeed;
     }
 
     void Update () {

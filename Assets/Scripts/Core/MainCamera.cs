@@ -3,7 +3,7 @@
 public class MainCamera : MonoBehaviour {
 
     Portal[] portals;
-
+    Camera camera;
     void Awake () {
         portals = FindObjectsOfType<Portal> ();
     }
@@ -14,7 +14,7 @@ public class MainCamera : MonoBehaviour {
             portals[i].PrePortalRender ();
         }
         for (int i = 0; i < portals.Length; i++) {
-            portals[i].Render ();
+            portals[i].Render (camera);
         }
 
         for (int i = 0; i < portals.Length; i++) {
@@ -24,3 +24,4 @@ public class MainCamera : MonoBehaviour {
     }
 
 }
+

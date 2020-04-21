@@ -61,12 +61,9 @@ public class Portal : MonoBehaviour {
 
             } else {
                 traveller.graphicsClone.transform.SetPositionAndRotation (m.GetColumn (3), m.rotation);  
-                //UpdateSliceParams (traveller);
                 traveller.graphicsClone.transform.localScale =MyFunc.Div(linkedPortal.transform.lossyScale,transform.lossyScale);
                 traveller.previousOffsetFromPortal = offsetFromPortal;
             }
-            Debug.Log(linkedPortal.portalCam.transform.worldToLocalMatrix * m);
-            Debug.Log(portalCam.transform.worldToLocalMatrix * traveller.graphicsObject.transform.localToWorldMatrix);
         }
     }
 
@@ -79,7 +76,7 @@ public class Portal : MonoBehaviour {
 
     // Manually render the camera attached to this portal
     // Called after PrePortalRender, and before PostPortalRender
-    public void Render () {
+    public void Render (Camera viewCamera) {
 
         // Skip rendering the view from this portal if player is not looking at the linked portal
         if (!CameraUtility.VisibleFromCamera (linkedPortal.screen, playerCam)) {
