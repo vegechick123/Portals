@@ -3,6 +3,7 @@
 public class MainCamera : MonoBehaviour {
 
     public static Portal[] portals;
+    public static int recursionLimit=1;
     Camera playerCam;
     void Awake () {
         portals = FindObjectsOfType<Portal> ();
@@ -15,9 +16,14 @@ public class MainCamera : MonoBehaviour {
             portals[i].PrePortalRender ();
         }
         for (int i = 0; i < portals.Length; i++) {
-            portals[i].Render (playerCam,1);
+            portals[i].Render (playerCam, recursionLimit);
+            
         }
+        for (int i = 0; i < portals.Length; i++)
+        {
+            portals[i].SetViewTexture(recursionLimit);
 
+        }
         for (int i = 0; i < portals.Length; i++) {
             portals[i].PostPortalRender ();
         }

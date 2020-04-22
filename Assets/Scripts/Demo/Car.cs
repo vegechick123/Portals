@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Car : PortalTraveller {
-    public float maxSpeed = 1;
+    public float maxSpeed = 2;
     float speed;
     float targetSpeed;
     float smoothV;
@@ -15,7 +15,7 @@ public class Car : PortalTraveller {
 
     void Update () {
         float moveDst = Time.deltaTime * speed;
-        transform.position += transform.forward * Time.deltaTime * speed;
+        transform.position += transform.forward * Time.deltaTime * speed * transform.lossyScale.z;
 
         if (Input.GetKeyDown (KeyCode.C)) {
             targetSpeed = (targetSpeed == 0) ? maxSpeed : 0;

@@ -7,14 +7,13 @@ public class Portal : MonoBehaviour {
     public Portal linkedPortal;
     public MeshRenderer screen;
     public Material testMat;
-    public int recursionLimit = 5;
 
     [Header ("Advanced Settings")]
     public float nearClipOffset = 0.05f;
     public float nearClipLimit = 0.2f;
     public float sliceOffset = 0.2f;
     // Private variables
-    RenderTexture viewTexture;
+    RenderTexture[] viewTexture;
     RenderTexture viewBuffer;
     Camera portalCam;
     Camera viewCam;
@@ -29,6 +28,7 @@ public class Portal : MonoBehaviour {
         portalCam.enabled = false;
         portalCam.projectionMatrix = viewCam.projectionMatrix;
         trackedTravellers = new List<PortalTraveller> ();
+        viewTexture = new RenderTexture[MainCamera.recursionLimit+1];
         screenMeshFilter = screen.GetComponent<MeshFilter> ();
         screen.material.SetInt ("displayMask", 1);
     }
@@ -90,18 +90,24 @@ public class Portal : MonoBehaviour {
         
 
         portalCam.worldToCameraMatrix = localToWorldMatrix;
-        //for (int i = 0; i < MainCamera.portals.Length; i++)
-        //{
-        //    Portal curPortal = MainCamera.portals[i];
-        //    if (curPortal != linkedPortal)
-        //    {
-        //        curPortal.Render(portalCam, limit - 1);
-        //        portalCam.worldToCameraMatrix = localToWorldMatrix;
-        //    }
-        //}
-        
+        for (int i = 0; i < MainCamera.portals.Length; i++)
+        {
+            Portal curPortal = MainCamera.portals[i];
+            if (curPortal != linkedPortal)
+            {
+                curPortal.Render(portalCam, limit - 1);
+                portalCam.worldToCameraMatrix = localToWorldMatrix;
+                viewCam = _viewCamera;
+            }
+            
+        }
+        for (int i = 0; i < MainCamera.portals.Length; i++)
+        {
+            Portal curPortal = MainCamera.portals[i];
+            curPortal.SetViewTexture(limit-1);
+        }
 
-        CreateViewTexture();
+        CreateViewTexture(limit);
         CreateViewBuffer();
 
         SetNearClipPlane();
@@ -109,9 +115,10 @@ public class Portal : MonoBehaviour {
         // Hide screen so that camera can see through portal
         linkedPortal.screen.enabled = false;
         portalCam.Render();
-        Graphics.Blit(viewBuffer, viewTexture);
+        Graphics.Blit(viewBuffer, viewTexture[limit]);
         screen.material.SetInt("displayMask", 1);
         linkedPortal.screen.enabled = true;
+        CancelClipping();
     }
     void SetNearClipPlane()
     {
@@ -140,6 +147,23 @@ public class Portal : MonoBehaviour {
             portalCam.projectionMatrix = viewCam.projectionMatrix;
         }
 
+    }
+    void CancelClipping() 
+    {
+        foreach (var linkTraveller in linkedPortal.trackedTravellers)
+        {
+
+            // Addresses issue 2
+            linkTraveller.SetSliceOffsetDst(0, false);
+        }
+            
+
+
+        foreach (var traveller in trackedTravellers)
+        {
+            traveller.SetSliceOffsetDst(0, true);
+           
+        }
     }
     void HandleClipping () {
         // There are two main graphical issues when slicing travellers
@@ -200,20 +224,27 @@ public class Portal : MonoBehaviour {
         foreach (var traveller in trackedTravellers) {
             UpdateSliceParams (traveller);
         }
-        ProtectScreenFromClipping (viewCam.transform.position);
+        ProtectScreenFromClipping (Camera.main.transform.position);
     }
-    void CreateViewTexture () {
-        if (viewTexture == null || viewTexture.width != Screen.width || viewTexture.height != Screen.height) {
-            if (viewTexture != null) {
-                viewTexture.Release ();
+    void CreateViewTexture (int limit) {
+    
+        if (viewTexture[limit] == null || viewTexture[limit].width != Screen.width || viewTexture[limit].height != Screen.height) {
+            if (viewTexture[limit] != null) {
+                viewTexture[limit].Release ();
             }
-            viewTexture = new RenderTexture (Screen.width, Screen.height, 24);
+            viewTexture[limit] = new RenderTexture (Screen.width, Screen.height, 24);
             // Render the view from the portal camera to the view texture
             if(testMat!=null)
-                testMat.mainTexture = viewTexture;
+                testMat.mainTexture = viewTexture[limit];
             // Display the view texture on the screen of the linked portal
-            screen.material.SetTexture("_MainTex", viewTexture);
+            //screen.material.SetTexture("_MainTex", viewTexture);
         }
+    }
+    public void SetViewTexture(int limit)
+    {
+        if (limit < 0)
+            return;
+        screen.material.mainTexture = viewTexture[limit];
     }
     void CreateViewBuffer()
     {
@@ -236,10 +267,17 @@ public class Portal : MonoBehaviour {
 
     // Sets the thickness of the portal screen so as not to clip with camera near plane when player goes through
     float ProtectScreenFromClipping (Vector3 viewPoint) {
-        float halfHeight = viewCam.nearClipPlane * Mathf.Tan (viewCam.fieldOfView * 0.5f * Mathf.Deg2Rad);
-        float halfWidth = halfHeight * viewCam.aspect;
-        float dstToNearClipPlaneCorner =Vector3.Scale(viewCam.transform.lossyScale,new Vector3 (halfWidth, halfHeight, viewCam.nearClipPlane)).magnitude;
-        float screenThickness = dstToNearClipPlaneCorner+sliceOffset;
+
+        float screenThickness;
+        if (viewCam == Camera.main)
+        {
+            float halfHeight = viewCam.nearClipPlane * Mathf.Tan(viewCam.fieldOfView * 0.5f * Mathf.Deg2Rad);
+            float halfWidth = halfHeight * viewCam.aspect;
+            float dstToNearClipPlaneCorner = Vector3.Scale(viewCam.transform.lossyScale, new Vector3(halfWidth, halfHeight, viewCam.nearClipPlane)).magnitude;
+            screenThickness = dstToNearClipPlaneCorner + sliceOffset;
+        }
+        else
+            screenThickness = 0;
 
         Transform screenT = screen.transform;
         bool camFacingSameDirAsPortal = Vector3.Dot (transform.forward, transform.position - viewPoint) > 0;

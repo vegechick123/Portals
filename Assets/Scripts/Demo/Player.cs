@@ -79,7 +79,7 @@ public class Player : PortalTraveller {
         velocity = Vector3.SmoothDamp(velocity, targetVelocity, ref smoothV, smoothMoveTime);
 
 
-        rigibody.velocity =transform.TransformDirection(velocity+new Vector3(0,verticalVelocity,0));
+        rigibody.velocity =transform.TransformDirection(velocity+new Vector3(0,verticalVelocity,0))*transform.lossyScale.z;
 
         var flags = controller.Move(velocity*Time.fixedDeltaTime);
         if (flags == CollisionFlags.Below)
@@ -138,7 +138,7 @@ public class Player : PortalTraveller {
         pitch = Mathf.Clamp(pitch, pitchMinMax.x, pitchMinMax.y);
         smoothPitch = Mathf.SmoothDampAngle(smoothPitch, pitch, ref pitchSmoothV, rotationSmoothTime);
         smoothYaw = Mathf.SmoothDampAngle(smoothYaw, yaw, ref yawSmoothV, rotationSmoothTime);
-        transform.
+
         transform.rotation *= Quaternion.Euler(Vector3.up * mX * mouseSensitivity);
         cam.transform.localEulerAngles = Vector3.right * smoothPitch;
     }
