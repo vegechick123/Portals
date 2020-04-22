@@ -20,6 +20,10 @@ public class Car : PortalTraveller {
         if (Input.GetKeyDown (KeyCode.C)) {
             targetSpeed = (targetSpeed == 0) ? maxSpeed : 0;
         }
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            targetSpeed = (targetSpeed == 0) ? -maxSpeed : 0;
+        }
         speed = Mathf.SmoothDamp (speed, targetSpeed, ref smoothV, .5f);
     }
 }

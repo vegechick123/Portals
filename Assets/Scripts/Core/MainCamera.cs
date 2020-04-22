@@ -2,10 +2,11 @@
 
 public class MainCamera : MonoBehaviour {
 
-    Portal[] portals;
-    Camera camera;
+    public static Portal[] portals;
+    Camera playerCam;
     void Awake () {
         portals = FindObjectsOfType<Portal> ();
+        playerCam=GetComponent<Camera>();
     }
 
     void OnPreCull () {
@@ -14,7 +15,7 @@ public class MainCamera : MonoBehaviour {
             portals[i].PrePortalRender ();
         }
         for (int i = 0; i < portals.Length; i++) {
-            portals[i].Render (camera);
+            portals[i].Render (playerCam,1);
         }
 
         for (int i = 0; i < portals.Length; i++) {
