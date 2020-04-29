@@ -16,7 +16,7 @@ public class Player : PortalTraveller {
     public float mouseSensitivity = 10;
     public Vector2 pitchMinMax = new Vector2 (-40, 90);
     public float rotationSmoothTime = 0.1f;
-
+    public VariableJoystick variableJoystick;
     MyCharacterController controller;
     Camera cam;
     Rigidbody rigibody;
@@ -53,10 +53,15 @@ public class Player : PortalTraveller {
     }
     void Start () {
         cam = Camera.main;
-        if (lockCursor) {
+#if UNITY_STANDALONE_WIN
+        //这里的代码在IOS和Android平台都会编译
+        if (lockCursor)
+        {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
+#endif
+
 
         controller = GetComponent<MyCharacterController> ();
 
@@ -106,10 +111,35 @@ public class Player : PortalTraveller {
     }
     void UpdateInputs()
     {
+#if UNITY_STANDALONE_WIN
         input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-        jumpButton = Input.GetButton("Jump");
         mX = Input.GetAxisRaw("Mouse X");
+        float mMag = Mathf.Sqrt(mX * mX + mY * mY);
         mY = Input.GetAxisRaw("Mouse Y");
+        if ( mMag> 5)
+        {
+            mX = 0;
+            mY = 0;
+        }
+#endif
+#if UNITY_ANDROID
+        mX = 0;
+        mY = 0;
+        input = new Vector2(variableJoystick.Horizontal, variableJoystick.Vertical);
+        foreach (Touch touch in Input.touches)
+        {
+            
+            FPSDisplay.PutMessage(touch.phase.ToString()+touch.deltaPosition,true);
+            if (touch.phase == TouchPhase.Moved&&touch.position.x>Screen.width/2)
+            {
+                // Construct a ray from the current touch coordinates
+                mX += touch.deltaPosition.x/Screen.width*100;
+                mY += touch.deltaPosition.y/Screen.height*100;
+            }
+        }
+#endif
+        jumpButton = Input.GetButton("Jump");
+        
     }
     void Update () {
         UpdateInputs();
@@ -126,12 +156,8 @@ public class Player : PortalTraveller {
         if (disabled) {
             return;
         }
-        float mMag = Mathf.Sqrt(mX * mX + mY * mY);
-        if (mMag > 5)
-        {
-            mX = 0;
-            mY = 0;
-        }
+        
+        
 
         yaw += mX * mouseSensitivity;
         pitch -= mY * mouseSensitivity;

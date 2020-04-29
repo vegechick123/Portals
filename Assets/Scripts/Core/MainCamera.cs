@@ -15,10 +15,12 @@ public class MainCamera : MonoBehaviour {
         for (int i = 0; i < portals.Length; i++) {
             portals[i].PrePortalRender ();
         }
+        Portal.renderCount = 0;
         for (int i = 0; i < portals.Length; i++) {
             portals[i].Render (playerCam, recursionLimit);
             
         }
+        FPSDisplay.PutMessage("renderCount:" + Portal.renderCount,false);
         for (int i = 0; i < portals.Length; i++)
         {
             portals[i].SetViewTexture(recursionLimit);

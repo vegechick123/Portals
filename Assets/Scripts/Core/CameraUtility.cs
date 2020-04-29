@@ -14,7 +14,7 @@ public static class CameraUtility {
 
     // http://wiki.unity3d.com/index.php/IsVisibleFrom
     public static bool VisibleFromCamera (Renderer renderer, Camera camera) {
-        Plane[] frustumPlanes = GeometryUtility.CalculateFrustumPlanes (camera);
+        Plane[] frustumPlanes = GeometryUtility.CalculateFrustumPlanes (camera.projectionMatrix*camera.worldToCameraMatrix);
         return GeometryUtility.TestPlanesAABB (frustumPlanes, renderer.bounds);
     }
 

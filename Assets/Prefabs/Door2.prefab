@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8747746231842276774}
   - component: {fileID: 2069434295021489260}
   - component: {fileID: 4610812789306709436}
+  - component: {fileID: 8110597852091978448}
   m_Layer: 0
   m_Name: Frame
   m_TagString: Untagged
@@ -79,6 +80,20 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!64 &8110597852091978448
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2928660815775837734}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -6360558719573625917, guid: 2594a63a88cb5b44a8919009114da673, type: 3}
 --- !u!1 &2985197276435630635
 GameObject:
   m_ObjectHideFlags: 0
@@ -208,10 +223,10 @@ MonoBehaviour:
   linkedPortal: {fileID: 0}
   screen: {fileID: 5176014683215476065}
   testMat: {fileID: 0}
-  recursionLimit: 3
   nearClipOffset: 0.1
   nearClipLimit: 0.2
   sliceOffset: 0
+  hideDistance: 30
   DebugButton: 0
 --- !u!65 &1924489576338817571
 BoxCollider:
@@ -224,7 +239,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 2, z: 1}
+  m_Size: {x: 0.8, y: 1.6, z: 0.8}
   m_Center: {x: 0, y: 0, z: -0}
 --- !u!1 &8119857321605114126
 GameObject:
