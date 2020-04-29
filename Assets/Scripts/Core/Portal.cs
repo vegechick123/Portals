@@ -392,9 +392,9 @@ public class Portal : MonoBehaviour {
             return CameraUtility.VisibleFromCamera(screen, Camera.main);
         }
     }
-    void OnValidate () {
-        if (linkedPortal != null) {
-            linkedPortal.linkedPortal = this;
-        }
-    }
+    //void OnValidate () {
+    //    if (linkedPortal != null) {
+    //        linkedPortal.linkedPortal = this;
+    //    }
+    //}
 }
