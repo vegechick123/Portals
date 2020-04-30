@@ -16,7 +16,7 @@ public class PortalBlock : MonoBehaviour
     }
     private void Start()
     {
-        Destory();
+        //Destory();
     }
     private IEnumerator Dissolve()
     {
@@ -26,7 +26,6 @@ public class PortalBlock : MonoBehaviour
             time += Time.deltaTime*dissolveSpeed;
             if (time > 1)
             {
-                gameObject.SetActive(false);
                 yield break;
             }
             else
@@ -38,9 +37,33 @@ public class PortalBlock : MonoBehaviour
         }
         
     }
+    private IEnumerator RestoreDissolve()
+    {
+        float time = 1;
+        while (true)
+        {
+            time -= Time.deltaTime * dissolveSpeed;
+            if (time <= 0)
+            {
+                yield break;
+            }
+            else
+            {
+                material.SetFloat("_Dissolve", time);
+                yield return null;
+            }
+
+        }
+
+    }
     public void Destory()
     {
         colider.enabled = false;
         StartCoroutine(Dissolve());
+    }
+    public void Restore()
+    {
+        colider.enabled = true;
+        StartCoroutine(RestoreDissolve());
     }
 }

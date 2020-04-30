@@ -14,6 +14,7 @@ public class PortalTraveller : MonoBehaviour {
         transform.position = pos;
         transform.rotation = rot;
         transform.localScale = toPortal.lossyScale;
+        Physics.SyncTransforms();
     }
 
     // Called when first touches portal

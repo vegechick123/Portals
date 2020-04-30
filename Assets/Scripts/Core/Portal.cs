@@ -65,7 +65,12 @@ public class Portal : MonoBehaviour {
                 linkedPortal.OnTravellerEnterPortal (traveller);
                 trackedTravellers.RemoveAt (i);
                 i--;
+                if(portalController!=null)
+                {
 
+                    linkedPortal.portalController.OnComeToPortal();
+                    portalController.OnOutToPortal();
+                }
             } else {
                 traveller.graphicsClone.transform.SetPositionAndRotation (m.GetColumn (3), m.rotation);  
                 traveller.graphicsClone.transform.localScale =MyFunc.Div(linkedPortal.transform.lossyScale,transform.lossyScale);
