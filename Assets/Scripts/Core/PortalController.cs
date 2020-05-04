@@ -7,7 +7,7 @@ public class PortalController : MonoBehaviour
     // Start is called before the first frame update
     protected Portal curPortal;
     protected bool lastVisble;
-    protected void Awake()
+    virtual protected void Awake()
     {
         curPortal = GetComponent<Portal>();
         lastVisble = curPortal.isVisble;

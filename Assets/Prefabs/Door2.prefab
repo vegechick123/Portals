@@ -221,6 +221,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   linkedPortal: {fileID: 0}
+  originLinkedPortal: {fileID: 0}
   screen: {fileID: 5176014683215476065}
   testMat: {fileID: 0}
   nearClipOffset: 0.1
@@ -239,7 +240,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.8, y: 1.6, z: 0.8}
+  m_Size: {x: 1.4, y: 1.6, z: 1.7}
   m_Center: {x: 0, y: 0, z: -0}
 --- !u!1 &8119857321605114126
 GameObject:

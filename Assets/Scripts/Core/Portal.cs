@@ -66,11 +66,11 @@ public class Portal : MonoBehaviour {
                 trackedTravellers.RemoveAt (i);
                 i--;
                 if(portalController!=null)
-                {
-
-                    linkedPortal.portalController.OnComeToPortal();
+                {  
                     portalController.OnOutToPortal();
                 }
+                if (linkedPortal.portalController != null)
+                    linkedPortal.portalController.OnComeToPortal();
             } else {
                 traveller.graphicsClone.transform.SetPositionAndRotation (m.GetColumn (3), m.rotation);  
                 traveller.graphicsClone.transform.localScale =MyFunc.Div(linkedPortal.transform.lossyScale,transform.lossyScale);
@@ -90,6 +90,8 @@ public class Portal : MonoBehaviour {
     // Called after PrePortalRender, and before PostPortalRender
     public void Render(Camera _viewCamera,int limit)
     {
+        if (linkedPortal == null)
+            Debug.LogError(gameObject.name + "未连接传送门");
         // Skip rendering the view from this portal if player is not looking at the linked portal
         Vector3 viewCamerPos = _viewCamera.cameraToWorldMatrix.GetColumn(3);
         float distance = Vector3.Distance(viewCamerPos, transform.position);
@@ -149,7 +151,7 @@ public class Portal : MonoBehaviour {
 
         Vector3 camSpacePos = portalCam.worldToCameraMatrix.MultiplyPoint(clipPlane.position);
         Vector3 camSpaceNormal = portalCam.worldToCameraMatrix.MultiplyVector(clipPlane.forward) * dot;
-        float scalez = Mathf.Sqrt((portalCam.cameraToWorldMatrix[0, 2] * portalCam.cameraToWorldMatrix[0, 2] + portalCam.cameraToWorldMatrix[2, 2] * portalCam.cameraToWorldMatrix[2, 2]));
+        float scalez = 1;// Mathf.Sqrt((portalCam.cameraToWorldMatrix[0, 2] * portalCam.cameraToWorldMatrix[0, 2] + portalCam.cameraToWorldMatrix[2, 2] * portalCam.cameraToWorldMatrix[2, 2]));
         //Debug.Log(scalez);
         float camSpaceDst = -Vector3.Dot(camSpacePos, camSpaceNormal) + nearClipOffset/scalez;
 

@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : PortalTraveller {
+public class Player : PortalTraveller
+{
 
     public static Player player;
 
@@ -14,7 +15,7 @@ public class Player : PortalTraveller {
 
     public bool lockCursor;
     public float mouseSensitivity = 10;
-    public Vector2 pitchMinMax = new Vector2 (-40, 90);
+    public Vector2 pitchMinMax = new Vector2(-40, 90);
     public float rotationSmoothTime = 0.1f;
     public VariableJoystick variableJoystick;
     MyCharacterController controller;
@@ -43,6 +44,9 @@ public class Player : PortalTraveller {
     bool jumping;
     float lastGroundedTime;
     bool disabled;
+    [HideInInspector]
+    public PickUp holdObject;
+    public GameObject holdGraphicObject;
     private void Awake()
     {
         if (player == null)
@@ -51,7 +55,8 @@ public class Player : PortalTraveller {
             Debug.LogError("多个玩家");
         rigibody = GetComponent<Rigidbody>();
     }
-    void Start () {
+    void Start()
+    {
         cam = Camera.main;
 #if UNITY_STANDALONE_WIN
         //这里的代码在IOS和Android平台都会编译
@@ -63,30 +68,31 @@ public class Player : PortalTraveller {
 #endif
 
 
-        controller = GetComponent<MyCharacterController> ();
+        controller = GetComponent<MyCharacterController>();
 
         yaw = transform.eulerAngles.y;
         pitch = cam.transform.localEulerAngles.x;
         smoothYaw = yaw;
         smoothPitch = pitch;
 
-        
+
     }
     private void FixedUpdate()
     {
+        
         Vector3 inputDir = new Vector3(input.x, 0, input.y).normalized;
 
         float currentSpeed = (Input.GetKey(KeyCode.LeftShift)) ? runSpeed : walkSpeed;
-        Vector3 targetVelocity = inputDir* currentSpeed;
+        Vector3 targetVelocity = inputDir * currentSpeed;
 
-        float verticalVelocity= transform.InverseTransformDirection(rigibody.velocity).y+gravity*Time.fixedDeltaTime;
+        float verticalVelocity = transform.InverseTransformDirection(rigibody.velocity).y + gravity * Time.fixedDeltaTime;
 
         velocity = Vector3.SmoothDamp(velocity, targetVelocity, ref smoothV, smoothMoveTime);
 
 
-        rigibody.velocity =transform.TransformDirection(velocity+new Vector3(0,verticalVelocity,0))*transform.lossyScale.z;
+        rigibody.velocity = transform.TransformDirection(velocity + new Vector3(0, verticalVelocity, 0)) * transform.lossyScale.z;
 
-        var flags = controller.Move(velocity*Time.fixedDeltaTime);
+        var flags = controller.Move(velocity * Time.fixedDeltaTime);
         if (flags == CollisionFlags.Below)
         {
             jumping = false;
@@ -107,7 +113,7 @@ public class Player : PortalTraveller {
 
 
         // Verrrrrry gross hack to stop camera swinging down at start
-        
+
     }
     void UpdateInputs()
     {
@@ -121,6 +127,29 @@ public class Player : PortalTraveller {
             mX = 0;
             mY = 0;
         }
+        if (Input.GetMouseButtonDown(0))
+        {
+            RaycastHit raycastHit;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out raycastHit, 3f, 1 << LayerMask.NameToLayer("Cube")))
+            {
+                FPSDisplay.PutMessage("Hit", true);
+                holdObject = raycastHit.collider.gameObject.GetComponent<PickUp>();
+                holdGraphicObject=GameObject.Instantiate(holdObject.portalPhysicsObject.graphicsObject, graphicsObject.transform);
+                holdGraphicObject.transform.localPosition = new Vector3(0.6f, -0.4f, 1);
+                holdObject.Hold(this);
+            }
+        }
+        else if(Input.GetMouseButtonUp(0))
+        {
+            if (holdObject != null)
+            {
+                Destroy(holdGraphicObject);
+                holdObject.Release(graphicsObject.transform.TransformPoint(0f,-0f,1),transform.TransformDirection(new Vector3(0,0,2)));
+                holdObject = null;
+                
+            }
+        }
 #endif
 #if UNITY_ANDROID
         mX = 0;
@@ -128,36 +157,64 @@ public class Player : PortalTraveller {
         input = new Vector2(variableJoystick.Horizontal, variableJoystick.Vertical);
         foreach (Touch touch in Input.touches)
         {
-            
-            FPSDisplay.PutMessage(touch.phase.ToString()+touch.deltaPosition,true);
-            if (touch.phase == TouchPhase.Moved&&touch.position.x>Screen.width/2)
+
+            FPSDisplay.PutMessage(touch.phase.ToString() + touch.deltaPosition, true);
+            if (touch.phase == TouchPhase.Began)
+            {
+                RaycastHit raycastHit;
+                Ray ray = Camera.main.ScreenPointToRay(touch.position);
+                if (Physics.Raycast(ray, out raycastHit, 3f, 1 << LayerMask.NameToLayer("Cube")))
+                {
+                    FPSDisplay.PutMessage("Hit", true);
+                holdObject = raycastHit.collider.gameObject.GetComponent<PickUp>();
+                holdObject.Hold(this);
+                }
+                else
+                {
+                    FPSDisplay.PutMessage("NotHit", true);
+                }
+            }
+            else if (touch.phase == TouchPhase.Moved && touch.position.x > Screen.width / 2)
             {
                 // Construct a ray from the current touch coordinates
-                mX += touch.deltaPosition.x/Screen.width*100;
-                mY += touch.deltaPosition.y/Screen.height*100;
+                mX += touch.deltaPosition.x / Screen.width * 100;
+                mY += touch.deltaPosition.y / Screen.height * 100;
+            }
+            else if (touch.phase == TouchPhase.Ended)
+            {
+               if (holdObject != null)
+            {
+                holdObject.Release();
+                holdObject = null;
+                
+            }
             }
         }
 #endif
         jumpButton = Input.GetButton("Jump");
-        
+
     }
-    void Update () {
+    void Update()
+    {
         UpdateInputs();
-        if (Input.GetKeyDown (KeyCode.P)) {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-            Debug.Break ();
+            Debug.Break();
         }
-        if (Input.GetKeyDown (KeyCode.O)) {
+        if (Input.GetKeyDown(KeyCode.O))
+        {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             disabled = !disabled;
         }
-        if (disabled) {
+        if (disabled)
+        {
             return;
         }
-        
-        
+
+
 
         yaw += mX * mouseSensitivity;
         pitch -= mY * mouseSensitivity;
@@ -175,14 +232,15 @@ public class Player : PortalTraveller {
         matrix *= cam.transform.worldToLocalMatrix;
         cam.worldToCameraMatrix = matrix;
     }
-    
-    public override void Teleport (Transform fromPortal, Transform toPortal, Vector3 pos, Quaternion rot) {
+
+    public override void Teleport(Transform fromPortal, Transform toPortal, Vector3 pos, Quaternion rot)
+    {
         transform.position = pos;
         transform.rotation = rot;
-        transform.localScale= toPortal.lossyScale;
+        transform.localScale = toPortal.lossyScale;
         rigibody.velocity = transform.TransformDirection(velocity);
-        
-        Physics.SyncTransforms ();
+
+        Physics.SyncTransforms();
         Matrix4x4 matrix = Matrix4x4.identity;
         matrix[2, 2] = -1;
         matrix *= cam.transform.worldToLocalMatrix;

@@ -26,8 +26,12 @@ public class PortalTraveller : MonoBehaviour {
             originalMaterials = GetMaterials (graphicsObject);
             cloneMaterials = GetMaterials (graphicsClone);
         } else {
-
-            graphicsClone.SetActive (true);
+            Destroy(graphicsClone);
+            graphicsClone = Instantiate(graphicsObject);
+            graphicsClone.transform.parent = graphicsObject.transform.parent;
+            //graphicsClone.transform.localScale = graphicsObject.transform.localScale;
+            originalMaterials = GetMaterials(graphicsObject);
+            cloneMaterials = GetMaterials(graphicsClone);
         }
     }
 

@@ -17,22 +17,28 @@ public class Button : MonoBehaviour
         rigidbody = GetComponent<Rigidbody>();
         originPositon = rigidbody.position;
     }
-    private void Update()
+    private void FixedUpdate()
     {
         if (down)
-            height = Mathf.Clamp(height - Time.deltaTime, 0, 1);
+            height = Mathf.Clamp(height -0.3f * Time.deltaTime, -0.09f, 0);
         else
-            height = Mathf.Clamp(height + Time.deltaTime, 0, 1);
-        rigidbody.MovePosition(originPositon + new Vector3(0, height,0));
+            height = Mathf.Clamp(height + 0.3f*Time.deltaTime, -0.09f, 0);
+        rigidbody.MovePosition(originPositon +height*transform.up);
     }
     private void OnTriggerEnter(Collider other)
     {
-        down = true;
-        portalBlock.Destory();
+        if (other.tag == "Player" || other.tag == "Cube")
+        {
+            down = true;
+            portalBlock.Destory();
+        }
     }
     private void OnTriggerExit(Collider other)
     {
-        down = true;
-        portalBlock.Restore();
+        if (other.tag == "Player" || other.tag == "Cube")
+        {
+            down = false;
+            portalBlock.Restore();
+        }
     }
 }

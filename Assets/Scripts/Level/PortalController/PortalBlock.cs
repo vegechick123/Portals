@@ -8,7 +8,7 @@ public class PortalBlock : MonoBehaviour
 
     private Material material;
     private Collider colider;
-    private float dissolveSpeed=0.2f;
+    private float dissolveSpeed=0.4f;
     private void Awake()
     {
         colider = GetComponent<Collider>();
@@ -24,7 +24,7 @@ public class PortalBlock : MonoBehaviour
         while(true)
         {
             time += Time.deltaTime*dissolveSpeed;
-            if (time > 1)
+            if (time > 1f)
             {
                 yield break;
             }
@@ -39,7 +39,7 @@ public class PortalBlock : MonoBehaviour
     }
     private IEnumerator RestoreDissolve()
     {
-        float time = 1;
+        float time = 1f;
         while (true)
         {
             time -= Time.deltaTime * dissolveSpeed;
