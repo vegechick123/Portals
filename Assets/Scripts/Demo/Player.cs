@@ -138,14 +138,22 @@ public class Player : PortalTraveller
                 holdGraphicObject=GameObject.Instantiate(holdObject.portalPhysicsObject.graphicsObject, graphicsObject.transform);
                 holdGraphicObject.transform.localPosition = new Vector3(0.6f, -0.4f, 1);
                 holdObject.Hold(this);
+                if(graphicsClone.activeInHierarchy)
+                    EnterPortalThreshold();
             }
         }
         else if(Input.GetMouseButtonUp(0))
         {
             if (holdObject != null)
             {
-                Destroy(holdGraphicObject);
-                holdObject.Release(graphicsObject.transform.TransformPoint(0f,-0f,1),transform.TransformDirection(new Vector3(0,0,2)));
+                if (graphicsClone != null)
+                {
+                    Transform cubeClone = graphicsClone.transform.Find(holdGraphicObject.name);
+                    if(cubeClone!=null)
+                        Destroy(cubeClone.gameObject);
+                }
+                Destroy(holdGraphicObject);                
+                holdObject.Release(graphicsObject.transform.TransformPoint(0f,0f,0.4f),transform.TransformDirection(new Vector3(0,1f,5)),transform.rotation);
                 holdObject = null;
                 
             }
@@ -166,8 +174,11 @@ public class Player : PortalTraveller
                 if (Physics.Raycast(ray, out raycastHit, 3f, 1 << LayerMask.NameToLayer("Cube")))
                 {
                     FPSDisplay.PutMessage("Hit", true);
-                holdObject = raycastHit.collider.gameObject.GetComponent<PickUp>();
-                holdObject.Hold(this);
+                    holdObject = raycastHit.collider.gameObject.GetComponent<PickUp>();
+                    holdGraphicObject = GameObject.Instantiate(holdObject.portalPhysicsObject.graphicsObject, graphicsObject.transform);
+                    holdGraphicObject.transform.localPosition = new Vector3(0.6f, -0.4f, 1);
+                    holdObject.Hold(this);
+                    EnterPortalThreshold();
                 }
                 else
                 {
@@ -182,12 +193,19 @@ public class Player : PortalTraveller
             }
             else if (touch.phase == TouchPhase.Ended)
             {
-               if (holdObject != null)
-            {
-                holdObject.Release();
-                holdObject = null;
-                
-            }
+                if (holdObject != null)
+                {
+                    if (graphicsClone != null)
+                    {
+                        Transform cubeClone = graphicsClone.transform.Find(holdGraphicObject.name);
+                        if (cubeClone != null)
+                            Destroy(cubeClone.gameObject);
+                    }
+                    Destroy(holdGraphicObject);
+                    holdObject.Release(graphicsObject.transform.TransformPoint(0f, 0f, 0.4f), transform.TransformDirection(new Vector3(0, 1f, 5)), transform.rotation);
+                    holdObject = null;
+
+                }
             }
         }
 #endif
@@ -237,6 +255,7 @@ public class Player : PortalTraveller
     {
         transform.position = pos;
         transform.rotation = rot;
+        transform.position = transform.position ;
         transform.localScale = toPortal.lossyScale;
         rigibody.velocity = transform.TransformDirection(velocity);
 

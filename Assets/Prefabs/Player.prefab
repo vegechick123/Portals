@@ -56,11 +56,13 @@ MonoBehaviour:
   gravity: -18
   lockCursor: 1
   mouseSensitivity: 11
-  pitchMinMax: {x: -40, y: 85}
+  pitchMinMax: {x: -80, y: 80}
   rotationSmoothTime: 0.1
   variableJoystick: {fileID: 0}
   yaw: 5.187398
   pitch: 0.5499961
+  holdObject: {fileID: 0}
+  holdGraphicObject: {fileID: 0}
 --- !u!54 &1596623452
 Rigidbody:
   m_ObjectHideFlags: 0

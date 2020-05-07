@@ -49,7 +49,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 80
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!114 &3860821565767043804
 MonoBehaviour:
@@ -98,7 +98,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69b5718b5f7e1cb48b899ea76e271360, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rigibody: {fileID: 0}
+  rigidbody: {fileID: 0}
   portalPhysicsObject: {fileID: 0}
   player: {fileID: 0}
 --- !u!1001 &4834634170455317969

@@ -23,11 +23,11 @@ public class PortalController : MonoBehaviour
     {
 
     }
-    virtual public void OnOutToPortal()
+    virtual public void OnOutFromPortal(Portal toPortal)
     {
 
     }
-    virtual public void OnComeToPortal()
+    virtual public void OnComeToPortal(Portal FromPortal)
     {
 
     }

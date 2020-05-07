@@ -6,6 +6,7 @@ public class Button : MonoBehaviour
 {
     // Start is called before the first frame update
     public PortalBlock portalBlock;
+    public PortalBlock portalBlock2;
     new private Rigidbody  rigidbody;
     Vector3 originPositon;
     float height;
@@ -31,6 +32,8 @@ public class Button : MonoBehaviour
         {
             down = true;
             portalBlock.Destory();
+            if (portalBlock2 != null)
+                portalBlock2.Destory();
         }
     }
     private void OnTriggerExit(Collider other)
@@ -39,6 +42,8 @@ public class Button : MonoBehaviour
         {
             down = false;
             portalBlock.Restore();
+            if (portalBlock2 != null)
+                portalBlock2.Restore();
         }
     }
 }

@@ -8,7 +8,9 @@ public class PortalBlock : MonoBehaviour
 
     private Material material;
     private Collider colider;
-    private float dissolveSpeed=0.4f;
+    public float dissolveSpeed=0.4f;
+    public float min=0;
+    public float max = 1f;
     private void Awake()
     {
         colider = GetComponent<Collider>();
@@ -16,15 +18,15 @@ public class PortalBlock : MonoBehaviour
     }
     private void Start()
     {
-        //Destory();
+        
     }
     private IEnumerator Dissolve()
     {
-        float time = 0;
+        float time = min;
         while(true)
         {
             time += Time.deltaTime*dissolveSpeed;
-            if (time > 1f)
+            if (time > max)
             {
                 yield break;
             }
@@ -39,11 +41,11 @@ public class PortalBlock : MonoBehaviour
     }
     private IEnumerator RestoreDissolve()
     {
-        float time = 1f;
+        float time = max;
         while (true)
         {
             time -= Time.deltaTime * dissolveSpeed;
-            if (time <= 0)
+            if (time <= min)
             {
                 yield break;
             }
@@ -58,12 +60,14 @@ public class PortalBlock : MonoBehaviour
     }
     public void Destory()
     {
-        colider.enabled = false;
+        if(colider!=null)
+            colider.enabled = false;
         StartCoroutine(Dissolve());
     }
     public void Restore()
     {
-        colider.enabled = true;
+        if (colider != null)
+            colider.enabled = true;
         StartCoroutine(RestoreDissolve());
     }
 }
