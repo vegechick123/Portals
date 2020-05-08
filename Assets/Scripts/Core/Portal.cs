@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,18 +11,20 @@ public class Portal : MonoBehaviour
     public Portal originLinkedPortal;
     public MeshRenderer screen;
     public Material testMat;
-
+    
     [Header("Advanced Settings")]
     public float nearClipOffset = 0.05f;
     public float nearClipLimit = 0.2f;
     public float sliceOffset = 0.2f;
     public static int renderCount = 0;
     public float hideDistance = 30;
+    // Resursion 
+    public int recursionLimit = 1;
     public bool useRecursionPortal;
     [SerializeField]
     public Portal[] recursionPortal;
     // Private variables
-    RenderTexture[] viewTexture;
+    Stack<RenderTexture> viewTexture;
     RenderTexture viewBuffer;
     Camera portalCam;
     Camera viewCam;
@@ -40,9 +43,9 @@ public class Portal : MonoBehaviour
         portalCam.enabled = false;
         portalCam.projectionMatrix = viewCam.projectionMatrix;
         trackedTravellers = new List<PortalTraveller>();
-        viewTexture = new RenderTexture[MainCamera.recursionLimit + 1];
         screenMeshFilter = screen.GetComponent<MeshFilter>();
         screen.material.SetInt("displayMask", 1);
+        viewTexture = new Stack<RenderTexture>();
     }
 
     void LateUpdate()
@@ -99,7 +102,16 @@ public class Portal : MonoBehaviour
             UpdateSliceParams(traveller);
         }
     }
-
+    public bool Judge(Camera _viewCamera,int limit)
+    {
+        Vector3 viewCamerPos = _viewCamera.cameraToWorldMatrix.GetColumn(3);
+        float distance = Vector3.Distance(viewCamerPos, transform.position);
+        if (!CameraUtility.VisibleFromCamera(screen, _viewCamera) || limit < 0 || distance > hideDistance || linkedPortal.enabled == false || this.enabled == false || !linkedPortal.gameObject.activeInHierarchy || !gameObject.activeInHierarchy)
+        {
+            return false;
+        }
+        return true;
+    }
     // Manually render the camera attached to this portal
     // Called after PrePortalRender, and before PostPortalRender
     public void Render(Camera _viewCamera, int limit)
@@ -129,11 +141,20 @@ public class Portal : MonoBehaviour
             portalArr = recursionPortal;
         else
             portalArr = MainCamera.portals;
+        bool[] vis=new bool[portalArr.Length];
         for (int i = 0; i < portalArr.Length; i++)
         {
             Portal curPortal = portalArr[i];
             if (curPortal != linkedPortal && curPortal.enabled == true)
             {
+                if (!curPortal.Judge(portalCam, limit - 1))
+                {
+                    vis[i] = false;
+                    continue;
+                }
+                else
+                    vis[i] = true;
+
                 curPortal.Render(portalCam, limit - 1);
                 portalCam.worldToCameraMatrix = localToWorldMatrix;
                 portalCam.projectionMatrix = projection;
@@ -143,11 +164,13 @@ public class Portal : MonoBehaviour
         }
         for (int i = 0; i < portalArr.Length; i++)
         {
+            if (!vis[i])
+                continue;
             Portal curPortal = portalArr[i];
-            curPortal.SetViewTexture(limit - 1);
+            curPortal.SetViewTexture();
         }
 
-        CreateViewTexture(limit);
+        CreateViewTexture();
         CreateViewBuffer();
 
         SetNearClipPlane();
@@ -156,7 +179,15 @@ public class Portal : MonoBehaviour
         linkedPortal.screen.enabled = false;
         portalCam.Render();
         renderCount++;
-        Graphics.Blit(viewBuffer, viewTexture[limit]);
+        Graphics.Blit(viewBuffer, viewTexture.Peek());
+        RenderTexture.ReleaseTemporary(viewBuffer);
+        for (int i = 0; i < portalArr.Length; i++)
+        {
+            if (!vis[i])
+                continue;
+            Portal curPortal = portalArr[i];
+            curPortal.ReleaseViewTexture();
+        }
         screen.material.SetInt("displayMask", 1);
         linkedPortal.screen.enabled = true;
         CancelClipping();
@@ -283,47 +314,25 @@ public class Portal : MonoBehaviour
         }
         ProtectScreenFromClipping(Camera.main.transform.position);
     }
-    void CreateViewTexture(int limit)
+    void CreateViewTexture()
     {
 
-        int level = (MainCamera.recursionLimit - limit + 2);
-        if (viewTexture[limit] == null || viewTexture[limit].width != Screen.width / level || viewTexture[limit].height != Screen.height / level)
-        {
-            if (viewTexture[limit] != null)
-            {
-                viewTexture[limit].Release();
-            }
-            viewTexture[limit] = new RenderTexture(Screen.width / level, Screen.height / level, 24);
-            // Render the view from the portal camera to the view texture
-            if (testMat != null)
-                testMat.mainTexture = viewTexture[limit];
-            // Display the view texture on the screen of the linked portal
-            //screen.material.SetTexture("_MainTex", viewTexture);
-        }
+        int level = 1;
+        viewTexture.Push(RenderTexture.GetTemporary(Screen.width / level, Screen.height / level, 24));
     }
-    public void SetViewTexture(int limit)
+    public void ReleaseViewTexture()
     {
-        if (limit < 0)
-            return;
-        screen.material.mainTexture = viewTexture[limit];
+        RenderTexture.ReleaseTemporary(viewTexture.Pop());
+    }
+    public void SetViewTexture()
+    {
+        screen.material.mainTexture = viewTexture.Peek();
     }
     void CreateViewBuffer()
     {
-        if (viewBuffer == null || viewBuffer.width != Screen.width || viewBuffer.height != Screen.height)
-        {
-            if (viewBuffer != null)
-            {
-                viewBuffer.Release();
-            }
-            viewBuffer = new RenderTexture(Screen.width, Screen.height, 24);
-            portalCam.targetTexture = viewBuffer;
-            // Render the view from the portal camera to the view texture
-            if (testMat != null)
-                testMat.mainTexture = viewBuffer;
-            // Display the view texture on the screen of the linked portal
+        viewBuffer = RenderTexture.GetTemporary(Screen.width, Screen.height, 24);
+        portalCam.targetTexture = viewBuffer;
 
-
-        }
     }
 
     // Sets the thickness of the portal screen so as not to clip with camera near plane when player goes through
@@ -409,7 +418,7 @@ public class Portal : MonoBehaviour
     public void OnTriggerEnter(Collider other)
     {
         var traveller = other.GetComponent<PortalTraveller>();
-        if (traveller&&enabled)
+        if (traveller && enabled)
         {
             OnTravellerEnterPortal(traveller);
         }
@@ -418,7 +427,7 @@ public class Portal : MonoBehaviour
     public void OnTriggerExit(Collider other)
     {
         var traveller = other.GetComponent<PortalTraveller>();
-        if (traveller && trackedTravellers.Contains(traveller)&&enabled)
+        if (traveller && trackedTravellers.Contains(traveller) && enabled)
         {
             traveller.ExitPortalThreshold();
             trackedTravellers.Remove(traveller);
@@ -426,10 +435,10 @@ public class Portal : MonoBehaviour
     }
     public void ReleaseAllTraveller()
     {
-        foreach(PortalTraveller traveller in trackedTravellers)
+        foreach (PortalTraveller traveller in trackedTravellers)
         {
             traveller.ExitPortalThreshold();
-            
+
         }
         trackedTravellers.Clear();
     }
