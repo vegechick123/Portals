@@ -9,19 +9,23 @@ public class PickUp : MonoBehaviour
     public PortalPhysicsObject portalPhysicsObject;
     public Player player;
     private Quaternion originRotation;
+    private Collider colider;
     private void Awake()
     {
         rigidbody = GetComponent<Rigidbody>();
         portalPhysicsObject = GetComponent<PortalPhysicsObject>();
+        colider = GetComponent<Collider>();
     }
     public void Hold(Player player)
     {
+        colider.enabled = false;
         gameObject.SetActive(false);
         this.player = player;
         originRotation = player.transform.rotation;
     }
     public void Release(Vector3 position,Vector3 velocity,Quaternion nowRotation)
     {
+        colider.enabled = true;
         gameObject.SetActive(true);
         
         rigidbody.MoveRotation(nowRotation* Quaternion.Inverse(originRotation)* rigidbody.rotation);
