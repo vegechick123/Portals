@@ -17,9 +17,15 @@ public class PortalController : MonoBehaviour
         //Debug.Log(lastVisble + " " + curPortal.isVisble);
         if (lastVisble == true && curPortal.isVisble == false)
             OnOutOfSight();
+        if (lastVisble == false&& curPortal.isVisble == true)
+            OnIntoSight();
         lastVisble = curPortal.isVisble;
     }
     virtual protected void OnOutOfSight()
+    {
+
+    }
+    virtual protected void OnIntoSight()
     {
 
     }

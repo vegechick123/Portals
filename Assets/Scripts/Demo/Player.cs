@@ -23,6 +23,7 @@ public class Player : PortalTraveller
     Rigidbody rigibody;
     public float yaw;
     public float pitch;
+    public GameObject releaseButton;
     float smoothYaw;
     float smoothPitch;
 
@@ -47,8 +48,9 @@ public class Player : PortalTraveller
     [HideInInspector]
     public PickUp holdObject;
     public GameObject holdGraphicObject;
-    private void Awake()
+    override protected void Awake()
     {
+        base.Awake();
         if (player == null)
             player = this;
         else
@@ -115,6 +117,37 @@ public class Player : PortalTraveller
         // Verrrrrry gross hack to stop camera swinging down at start
 
     }
+    public void HoldObject(PickUp holdObject)
+    {
+#if UNITY_ANDROID
+        releaseButton.SetActive(true);
+#endif
+        holdGraphicObject = GameObject.Instantiate(holdObject.portalPhysicsObject.graphicsObject, graphicsObject.transform);
+        holdGraphicObject.transform.localPosition = new Vector3(0.6f, -0.4f, 1);
+        holdObject.Hold(this);
+        if (graphicsClone != null && graphicsClone.activeInHierarchy)
+            EnterPortalThreshold();
+    }
+    public void ReleaseHoldObject()
+    {
+#if UNITY_ANDROID
+        releaseButton.SetActive(false);
+#endif
+        Debug.Log(2);
+        if (holdObject != null)
+        {
+            if (graphicsClone != null)
+            {
+                Transform cubeClone = graphicsClone.transform.Find(holdGraphicObject.name);
+                if (cubeClone != null)
+                    Destroy(cubeClone.gameObject);
+            }
+            Destroy(holdGraphicObject);
+            holdObject.Release(graphicsObject.transform.TransformPoint(0f, 0f, 0), transform.TransformDirection(new Vector3(0, 1f, 5)));
+            holdObject = null;
+
+        }
+    }
     void UpdateInputs()
     {
 #if UNITY_STANDALONE_WIN
@@ -134,29 +167,13 @@ public class Player : PortalTraveller
             if (Physics.Raycast(ray, out raycastHit, 3f, 1 << LayerMask.NameToLayer("Cube")))
             {
                 FPSDisplay.PutMessage("Hit", true);
-                holdObject = raycastHit.collider.gameObject.GetComponent<PickUp>();
-                holdGraphicObject=GameObject.Instantiate(holdObject.portalPhysicsObject.graphicsObject, graphicsObject.transform);
-                holdGraphicObject.transform.localPosition = new Vector3(0.6f, -0.4f, 1);
-                holdObject.Hold(this);
-                if(graphicsClone.activeInHierarchy)
-                    EnterPortalThreshold();
+                    holdObject = raycastHit.collider.gameObject.GetComponent<PickUp>();
+                    HoldObject(holdObject); 
             }
         }
         else if(Input.GetMouseButtonUp(0))
         {
-            if (holdObject != null)
-            {
-                if (graphicsClone != null)
-                {
-                    Transform cubeClone = graphicsClone.transform.Find(holdGraphicObject.name);
-                    if(cubeClone!=null)
-                        Destroy(cubeClone.gameObject);
-                }
-                Destroy(holdGraphicObject);                
-                holdObject.Release(graphicsObject.transform.TransformPoint(0f,0f,0.4f),transform.TransformDirection(new Vector3(0,1f,5)),transform.rotation);
-                holdObject = null;
-                
-            }
+            ReleaseHoldObject();
         }
 #endif
 #if UNITY_ANDROID
@@ -175,10 +192,7 @@ public class Player : PortalTraveller
                 {
                     FPSDisplay.PutMessage("Hit", true);
                     holdObject = raycastHit.collider.gameObject.GetComponent<PickUp>();
-                    holdGraphicObject = GameObject.Instantiate(holdObject.portalPhysicsObject.graphicsObject, graphicsObject.transform);
-                    holdGraphicObject.transform.localPosition = new Vector3(0.6f, -0.4f, 1);
-                    holdObject.Hold(this);
-                    EnterPortalThreshold();
+                    HoldObject(holdObject); 
                 }
                 else
                 {
@@ -190,22 +204,6 @@ public class Player : PortalTraveller
                 // Construct a ray from the current touch coordinates
                 mX += touch.deltaPosition.x / Screen.width * 100;
                 mY += touch.deltaPosition.y / Screen.height * 100;
-            }
-            else if (touch.phase == TouchPhase.Ended)
-            {
-                if (holdObject != null)
-                {
-                    if (graphicsClone != null)
-                    {
-                        Transform cubeClone = graphicsClone.transform.Find(holdGraphicObject.name);
-                        if (cubeClone != null)
-                            Destroy(cubeClone.gameObject);
-                    }
-                    Destroy(holdGraphicObject);
-                    holdObject.Release(graphicsObject.transform.TransformPoint(0f, 0f, 0.4f), transform.TransformDirection(new Vector3(0, 1f, 5)), transform.rotation);
-                    holdObject = null;
-
-                }
             }
         }
 #endif
@@ -251,19 +249,22 @@ public class Player : PortalTraveller
         cam.worldToCameraMatrix = matrix;
     }
 
-    public override void Teleport(Transform fromPortal, Transform toPortal, Vector3 pos, Quaternion rot)
+    public override void Teleport(Transform fromPortal, Transform toPortal, Vector3 pos, Quaternion rot, Matrix4x4 matrix)
     {
-        transform.position = pos;
-        transform.rotation = rot;
-        transform.position = transform.position ;
-        transform.localScale = toPortal.lossyScale;
+        if(holdObject!=null)
+            holdObject.toMatrix = matrix * transform.worldToLocalMatrix * holdObject.toMatrix;
+        
+        base.Teleport(fromPortal, toPortal, pos, rot, matrix);
         rigibody.velocity = transform.TransformDirection(velocity);
 
-        Physics.SyncTransforms();
-        Matrix4x4 matrix = Matrix4x4.identity;
-        matrix[2, 2] = -1;
-        matrix *= cam.transform.worldToLocalMatrix;
-        cam.worldToCameraMatrix = matrix;
+        
+
+
+        Matrix4x4 camMatrix = Matrix4x4.identity;
+        camMatrix[2, 2] = -1;
+        camMatrix *= cam.transform.worldToLocalMatrix;
+        cam.worldToCameraMatrix = camMatrix;
+        
     }
 
 }

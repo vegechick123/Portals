@@ -11,7 +11,8 @@ public class PortalPhysicsObject : PortalTraveller {
     public float gravity = -18;
     static int i;
 
-    void Awake () {
+    override protected void Awake () {
+        base.Awake();
         rigidbody = GetComponent<Rigidbody> ();
         graphicsObject.GetComponent<MeshRenderer> ().material.color = colors[i];
         i++;
@@ -24,9 +25,9 @@ public class PortalPhysicsObject : PortalTraveller {
         rigidbody.AddForce(transform.up*gravity);
     }
 
-    public override void Teleport (Transform fromPortal, Transform toPortal, Vector3 pos, Quaternion rot) {
+    public override void Teleport (Transform fromPortal, Transform toPortal, Vector3 pos, Quaternion rot, Matrix4x4 matrix) {
 
-        base.Teleport(fromPortal, toPortal, pos, rot);
+        base.Teleport(fromPortal, toPortal, pos, rot, matrix);
         rigidbody.velocity = toPortal.TransformVector(transform.InverseTransformVector(rigidbody.velocity));
         rigidbody.angularVelocity = toPortal.TransformVector (transform.InverseTransformVector (rigidbody.angularVelocity));
         

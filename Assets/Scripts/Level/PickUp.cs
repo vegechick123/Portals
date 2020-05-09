@@ -8,27 +8,27 @@ public class PickUp : MonoBehaviour
     new public Rigidbody rigidbody;
     public PortalPhysicsObject portalPhysicsObject;
     public Player player;
-    private Quaternion originRotation;
+    public Matrix4x4 toMatrix;
     private Collider colider;
     private void Awake()
     {
         rigidbody = GetComponent<Rigidbody>();
         portalPhysicsObject = GetComponent<PortalPhysicsObject>();
-        colider = GetComponent<Collider>();
+        colider = GetComponent<Collider>();        
     }
     public void Hold(Player player)
     {
         colider.enabled = false;
         gameObject.SetActive(false);
         this.player = player;
-        originRotation = player.transform.rotation;
+        toMatrix = transform.localToWorldMatrix;
     }
-    public void Release(Vector3 position,Vector3 velocity,Quaternion nowRotation)
+    public void Release(Vector3 position,Vector3 velocity)
     {
         colider.enabled = true;
         gameObject.SetActive(true);
-        
-        rigidbody.MoveRotation(nowRotation* Quaternion.Inverse(originRotation)* rigidbody.rotation);
+
+        transform.rotation = toMatrix.rotation;
         rigidbody.MovePosition(position);
         rigidbody.velocity = velocity;
         if (player == null)

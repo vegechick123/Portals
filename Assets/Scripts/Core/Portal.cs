@@ -29,6 +29,7 @@ public class Portal : MonoBehaviour
     Camera portalCam;
     Camera viewCam;
 
+    new Collider collider;
     Material firstRecursionMat;
     List<PortalTraveller> trackedTravellers;
     MeshFilter screenMeshFilter;
@@ -46,6 +47,7 @@ public class Portal : MonoBehaviour
         screenMeshFilter = screen.GetComponent<MeshFilter>();
         screen.material.SetInt("displayMask", 1);
         viewTexture = new Stack<RenderTexture>();
+        collider=GetComponent<Collider>();
     }
 
     void LateUpdate()
@@ -60,6 +62,13 @@ public class Portal : MonoBehaviour
         {
             PortalTraveller traveller = trackedTravellers[i];
             Transform travellerT = traveller.transform;
+            if (!traveller.gameObject.activeSelf||!traveller.collider.bounds.Intersects(collider.bounds))
+            {
+                traveller.ExitPortalThreshold();
+                trackedTravellers.Remove(traveller);
+                i--;
+                continue;
+            }
             var m = linkedPortal.transform.localToWorldMatrix * transform.worldToLocalMatrix * travellerT.localToWorldMatrix;
 
             Vector3 offsetFromPortal = travellerT.position - transform.position;
@@ -70,7 +79,7 @@ public class Portal : MonoBehaviour
             {
                 var positionOld = travellerT.position;
                 var rotOld = travellerT.rotation;
-                traveller.Teleport(transform, traveller.graphicsClone.transform, m.GetColumn(3), m.rotation);
+                traveller.Teleport(transform, traveller.graphicsClone.transform, m.GetColumn(3), m.rotation,m);
                 traveller.graphicsClone.transform.SetPositionAndRotation(positionOld, rotOld);
                 traveller.graphicsClone.transform.localScale = MyFunc.Div(transform.lossyScale, linkedPortal.transform.lossyScale);
                 // Can't rely on OnTriggerEnter/Exit to be called next frame since it depends on when FixedUpdate runs
@@ -88,7 +97,7 @@ public class Portal : MonoBehaviour
             else
             {
                 traveller.graphicsClone.transform.SetPositionAndRotation(m.GetColumn(3), m.rotation);
-                traveller.graphicsClone.transform.localScale = MyFunc.Div(linkedPortal.transform.lossyScale, transform.lossyScale);
+                traveller.graphicsClone.transform.localScale = MyFunc.Div(m.lossyScale, travellerT.transform.lossyScale);
                 traveller.previousOffsetFromPortal = offsetFromPortal;
             }
         }
@@ -145,7 +154,7 @@ public class Portal : MonoBehaviour
         for (int i = 0; i < portalArr.Length; i++)
         {
             Portal curPortal = portalArr[i];
-            if (curPortal != linkedPortal && curPortal.enabled == true)
+            if (curPortal != linkedPortal && curPortal.enabled == true&&curPortal!=this)
             {
                 if (!curPortal.Judge(portalCam, limit - 1))
                 {

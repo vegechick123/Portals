@@ -59,7 +59,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 259463d25c5ec2f468f975fb97d27294, type: 2}
+  - {fileID: 2100000, guid: 68dd10b97201c4b3abc5b47f18f9e811, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -213,7 +213,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 259463d25c5ec2f468f975fb97d27294, type: 2}
+      objectReference: {fileID: 2100000, guid: 68dd10b97201c4b3abc5b47f18f9e811, type: 2}
     - target: {fileID: 7495545064817153161, guid: b368cf11ed0022e4ea58fa75ddc7cb13,
         type: 3}
       propertyPath: linkedPortal
@@ -255,7 +255,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 259463d25c5ec2f468f975fb97d27294, type: 2}
+      objectReference: {fileID: 2100000, guid: aba849b25aef0463eab029fc708e9c12, type: 2}
     - target: {fileID: 813844057855030512, guid: 1b1615160c541cc4c9c019b164132f88,
         type: 3}
       propertyPath: m_LocalRotation.y
@@ -350,12 +350,12 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 259463d25c5ec2f468f975fb97d27294, type: 2}
+      objectReference: {fileID: 2100000, guid: aba849b25aef0463eab029fc708e9c12, type: 2}
     - target: {fileID: 4306301276189580450, guid: 1b1615160c541cc4c9c019b164132f88,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 259463d25c5ec2f468f975fb97d27294, type: 2}
+      objectReference: {fileID: 2100000, guid: aba849b25aef0463eab029fc708e9c12, type: 2}
     - target: {fileID: 5980617260003061740, guid: 1b1615160c541cc4c9c019b164132f88,
         type: 3}
       propertyPath: linkedPortal
@@ -500,7 +500,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 259463d25c5ec2f468f975fb97d27294, type: 2}
+      objectReference: {fileID: 2100000, guid: 68dd10b97201c4b3abc5b47f18f9e811, type: 2}
     - target: {fileID: 7495545064817153161, guid: b368cf11ed0022e4ea58fa75ddc7cb13,
         type: 3}
       propertyPath: linkedPortal

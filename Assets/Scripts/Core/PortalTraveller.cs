@@ -9,8 +9,12 @@ public class PortalTraveller : MonoBehaviour {
 
     public Material[] originalMaterials { get; set; }
     public Material[] cloneMaterials { get; set; }
-
-    public virtual void Teleport (Transform fromPortal, Transform toPortal, Vector3 pos, Quaternion rot) {
+    new public Collider collider;
+    virtual protected void Awake()
+    {
+        collider = GetComponent<Collider>();
+    }
+    public virtual void Teleport (Transform fromPortal, Transform toPortal, Vector3 pos, Quaternion rot,Matrix4x4 matrix) {
         transform.position = pos;
         transform.rotation = rot;
         transform.localScale = toPortal.lossyScale;
